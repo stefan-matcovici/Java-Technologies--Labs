@@ -1,18 +1,15 @@
 package ro.uaic.info.javatehnologies;
 
-import com.sun.deploy.net.BasicHttpRequest;
-import com.sun.deploy.net.HttpRequest;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -26,12 +23,14 @@ import java.util.concurrent.Future;
 
 public class MapApplication extends Application {
 
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("My First JavaFX App");
 
         // Have one (or more) threads ready to do the async tasks. Do this during startup of your app.
-        ExecutorService executor = Executors.newFixedThreadPool(10);
+
 
         //Creating a GridPane container
         GridPane grid = new GridPane();
@@ -39,31 +38,40 @@ public class MapApplication extends Application {
         grid.setVgap(5);
         grid.setHgap(5);
 
-        //Defining the Name text field
+
+        //Defining the Key text field
+        final TextField keyTextField = new TextField();
+        keyTextField.setPromptText("Enter the value");
+        GridPane.setConstraints(keyTextField, 0, 0);
+        grid.getChildren().add(keyTextField);
+
+        //Defining the Value text field
         final TextField valueTextField = new TextField();
-        valueTextField.setPromptText("Enter the value");
+        valueTextField.setPromptText("Enter the key");
         valueTextField.setPrefColumnCount(10);
         valueTextField.getText();
-        GridPane.setConstraints(valueTextField, 0, 0);
+        GridPane.setConstraints(valueTextField, 0, 1);
         grid.getChildren().add(valueTextField);
-
-        //Defining the Last Name text field
-        final TextField keyTextField = new TextField();
-        keyTextField.setPromptText("Enter the key");
-        GridPane.setConstraints(keyTextField, 0, 1);
-        grid.getChildren().add(keyTextField);
 
         //Defining the Submit button
         Button submit = new Button("Submit");
-        GridPane.setConstraints(submit, 0, 2);
+        GridPane.setConstraints(submit, 0, 3);
         GridPane.setHalignment(submit, HPos.CENTER);
+
+        //Creating a Text object
+        Text text = new Text();
+        text.setTextAlignment(TextAlignment.CENTER);
+
+        GridPane.setConstraints(text, 0, 2);
+        grid.getChildren().add(text);
+
 
 
         submit.setOnAction(event -> {
 
             try {
                 // Fire a request.
-                Future<Response> response = executor.submit(new Request(new URL("http://google.com")));
+                Future<Response> response = executor.submit(new Request(new URL("http://localhost:8080/MapHTTPServlet"), keyTextField.getCharacters(), valueTextField.getCharacters()));
 
                 // Do your other tasks here (will be processed immediately, current thread won't block).
                 // ...
@@ -76,24 +84,25 @@ public class MapApplication extends Application {
                 Scanner s = new Scanner(body).useDelimiter("\\A");
                 String result = s.hasNext() ? s.next() : "";
 
-            } catch (MalformedURLException e) {
+                //Setting the text to be added.
+                text.setText(result);
+
+            } catch (MalformedURLException | ExecutionException | InterruptedException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } finally {
-                // Shutdown the threads during shutdown of your app.
-                executor.shutdown();
             }
 
         });
-
         grid.getChildren().add(submit);
 
         Scene scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        executor.shutdown();
     }
 
     public static void main(String[] args) {

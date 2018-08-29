@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,7 +49,18 @@ public class MapHTTPServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             store(key, value);
-            showList(request, response);
+            if (request.getHeader("User-Agent").contains("Mozilla")) {
+                showList(request, response);
+            }
+            else {
+                try (PrintWriter writer = response.getWriter()) {
+                    for (Map.Entry<String, String> entry: map.entrySet()) {
+                        writer.append(String.format("%s : %s\n", entry.getKey(), entry.getValue()));
+                    }
+                    writer.flush();
+                }
+                response.setStatus(200);
+            }
         }
     }
 
