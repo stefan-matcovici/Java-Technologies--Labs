@@ -1,6 +1,7 @@
 package ro.uaic.info.javatehnologies;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -12,14 +13,21 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public class MapApplication extends Application {
 
@@ -61,35 +69,57 @@ public class MapApplication extends Application {
         //Creating a Text object
         Text text = new Text();
         text.setTextAlignment(TextAlignment.CENTER);
-
+        GridPane.setHalignment(submit, HPos.CENTER);
         GridPane.setConstraints(text, 0, 2);
         grid.getChildren().add(text);
 
-
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setVisible(false);
+        GridPane.setConstraints(text, 0, 4);
+        grid.getChildren().add(progressIndicator);
 
         submit.setOnAction(event -> {
+            Task<String> getResponseTask = new Task<String>() {
+                @Override
+                protected String call() throws Exception {
+                    URL url = new URL("http://localhost:8080/MapHTTPServlet");
+                    URLConnection urlConnection = url.openConnection();
+                    urlConnection.setDoOutput(true);
 
-            try {
-                // Fire a request.
-                Future<Response> response = executor.submit(new Request(new URL("http://localhost:8080/MapHTTPServlet"), keyTextField.getCharacters(), valueTextField.getCharacters()));
+                    String urlParameters = String.format("key=%s&value=%s", keyTextField.getCharacters(), valueTextField.getCharacters());
+                    byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+                    int postDataLength = postData.length;
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setDoOutput(true);
+                    conn.setInstanceFollowRedirects(false);
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    conn.setRequestProperty("charset", "utf-8");
+                    conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+                    conn.setUseCaches(false);
+                    try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+                        wr.write(postData);
+                        wr.flush();
+                    }
 
-                // Do your other tasks here (will be processed immediately, current thread won't block).
-                // ...
-                ProgressIndicator progressIndicator = new ProgressIndicator();
-                grid.getChildren().add(progressIndicator);
+                    return new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                            .lines().collect(Collectors.joining("\n"));
+                }
+            };
 
-                // Get the response (here the current thread will block until response is returned).
-                InputStream body = response.get().getBody();
-                grid.getChildren().remove(progressIndicator);
-                Scanner s = new Scanner(body).useDelimiter("\\A");
-                String result = s.hasNext() ? s.next() : "";
+            getResponseTask.setOnRunning(event1 -> {
+                progressIndicator.setProgress(event1.getSource().getProgress());
+            });
 
-                //Setting the text to be added.
-                text.setText(result);
+            getResponseTask.setOnSucceeded(event1 -> {
+                text.setText(event1.getSource().getValue().toString());
+                progressIndicator.setVisible(false);
+            });
 
-            } catch (MalformedURLException | ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            Thread th = new Thread(getResponseTask);
+            th.start();
+            progressIndicator.setVisible(true);
+
 
         });
         grid.getChildren().add(submit);

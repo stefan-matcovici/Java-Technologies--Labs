@@ -45,6 +45,12 @@ public class MapHTTPServlet extends HttpServlet {
         String key = request.getParameter("key");
         String value = request.getParameter("value");
 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (key == null || value == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } else {
