@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -14,12 +15,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-@WebServlet(name = "MapHTTPServlet", urlPatterns = "/")
-@WebInitParam(name = "propertiesPath", value = "map.properties")
+@WebServlet(name = "MapHTTPServlet",
+        urlPatterns = "/",
+        initParams = {
+                @WebInitParam(name = "propertiesPath", value = "map.properties")
+        }
+)
+
 public class MapHTTPServlet extends HttpServlet {
 
     private Map<String, String> map = new ConcurrentSkipListMap<>(Comparator.comparing(String::toString));
@@ -33,7 +40,7 @@ public class MapHTTPServlet extends HttpServlet {
         String stringPath = getServletConfig().getInitParameter("propertiesPath");
         try {
             Path path = Paths.get(getServletContext().getRealPath("/WEB-INF/" + stringPath));
-            outputStream = Files.newOutputStream(path);
+            outputStream = new BufferedOutputStream(Files.newOutputStream(path));
         } catch (IOException e) {
             getServletContext().log(String.format("Couldn't create outputstream for file %s: %s", stringPath, e));
             throw new ServletException("IOException in init method");
@@ -57,10 +64,9 @@ public class MapHTTPServlet extends HttpServlet {
             store(key, value);
             if (request.getHeader("User-Agent").contains("Mozilla")) {
                 showList(request, response);
-            }
-            else {
+            } else {
                 try (PrintWriter writer = response.getWriter()) {
-                    for (Map.Entry<String, String> entry: map.entrySet()) {
+                    for (Map.Entry<String, String> entry : map.entrySet()) {
                         writer.append(String.format("%s : %s\n", entry.getKey(), entry.getValue()));
                     }
                     writer.flush();
@@ -72,15 +78,28 @@ public class MapHTTPServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log(request);
-        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     private void log(HttpServletRequest request) {
-        getServletContext().log(String.format("Method used: %s\n\"Client ip: %s\nUser Agent: %s\nClient language:" +
+        getServletContext().log(String.format("\nMethod used: %s\n\"Client ip: %s\nUser Agent: %s\nClient language:" +
                         " %s\nParameters: %s", request.getMethod(), request.getRemoteAddr(),
                 request.getHeader("User-Agent"), request.getLocale().toString(),
-                request.getParameterMap().toString()));
+                logParameterMap(request.getParameterMap())));
 
+    }
+
+    private String logParameterMap(Map<String, String[]> parameterMap) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String, String[]> entry: parameterMap.entrySet()) {
+            stringBuilder.append(entry.getKey())
+                    .append(": ");
+            for (String value: entry.getValue()) {
+                stringBuilder.append(value)
+                        .append(" ");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     private void store(String key, String value) throws IOException {
@@ -102,5 +121,13 @@ public class MapHTTPServlet extends HttpServlet {
     public void destroy() {
         super.destroy();
 
+        try {
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            getServletContext().log(String.format("Couldn't close file stream: %s", e));
+        }
+
+        getServletContext().log("Closed file");
     }
 }

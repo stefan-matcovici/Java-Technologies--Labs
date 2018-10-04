@@ -6,7 +6,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -15,18 +14,13 @@ import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 public class MapApplication extends Application {
@@ -36,9 +30,6 @@ public class MapApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("My First JavaFX App");
-
-        // Have one (or more) threads ready to do the async tasks. Do this during startup of your app.
-
 
         //Creating a GridPane container
         GridPane grid = new GridPane();
@@ -73,11 +64,6 @@ public class MapApplication extends Application {
         GridPane.setConstraints(text, 0, 2);
         grid.getChildren().add(text);
 
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setVisible(false);
-        GridPane.setConstraints(text, 0, 4);
-        grid.getChildren().add(progressIndicator);
-
         submit.setOnAction(event -> {
             Task<String> getResponseTask = new Task<String>() {
                 @Override
@@ -107,19 +93,12 @@ public class MapApplication extends Application {
                 }
             };
 
-            getResponseTask.setOnRunning(event1 -> {
-                progressIndicator.setProgress(event1.getSource().getProgress());
-            });
-
             getResponseTask.setOnSucceeded(event1 -> {
                 text.setText(event1.getSource().getValue().toString());
-                progressIndicator.setVisible(false);
             });
 
             Thread th = new Thread(getResponseTask);
             th.start();
-            progressIndicator.setVisible(true);
-
 
         });
         grid.getChildren().add(submit);
