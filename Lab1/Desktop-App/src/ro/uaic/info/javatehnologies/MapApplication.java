@@ -1,17 +1,5 @@
 package ro.uaic.info.javatehnologies;
 
-import javafx.application.Application;
-import javafx.concurrent.Task;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -19,60 +7,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class MapApplication extends Application {
+public class MapApplication {
 
-    ExecutorService executor = Executors.newFixedThreadPool(10);
+    public static int calls = 0;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("My First JavaFX App");
-
-        //Creating a GridPane container
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(5);
-        grid.setHgap(5);
-
-
-        //Defining the Key text field
-        final TextField keyTextField = new TextField();
-        keyTextField.setPromptText("Enter the value");
-        GridPane.setConstraints(keyTextField, 0, 0);
-        grid.getChildren().add(keyTextField);
-
-        //Defining the Value text field
-        final TextField valueTextField = new TextField();
-        valueTextField.setPromptText("Enter the key");
-        valueTextField.setPrefColumnCount(10);
-        valueTextField.getText();
-        GridPane.setConstraints(valueTextField, 0, 1);
-        grid.getChildren().add(valueTextField);
-
-        //Defining the Submit button
-        Button submit = new Button("Submit");
-        GridPane.setConstraints(submit, 0, 3);
-        GridPane.setHalignment(submit, HPos.CENTER);
-
-        //Creating a Text object
-        Text text = new Text();
-        text.setTextAlignment(TextAlignment.CENTER);
-        GridPane.setHalignment(submit, HPos.CENTER);
-        GridPane.setConstraints(text, 0, 2);
-        grid.getChildren().add(text);
-
-        submit.setOnAction(event -> {
-            Task<String> getResponseTask = new Task<String>() {
-                @Override
-                protected String call() throws Exception {
-                    URL url = new URL("http://localhost:8080/MapHTTPServlet");
+    public static void main(String... args) throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(100);
+        List<Callable<Void>> tasks = new ArrayList<>();
+        for (int i = 0; i < 1_000; i++)
+            tasks.add(() -> {
+                try {
+                    URL url = new URL("http://localhost:8080/map");
                     URLConnection urlConnection = url.openConnection();
                     urlConnection.setDoOutput(true);
 
-                    String urlParameters = String.format("key=%s&value=%s", keyTextField.getCharacters(), valueTextField.getCharacters());
+                    String urlParameters = String.format("key=%s&value=%s", "yes"+String.valueOf(calls), "yes");
                     byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
                     int postDataLength = postData.length;
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -88,33 +45,20 @@ public class MapApplication extends Application {
                         wr.flush();
                     }
 
-                    return new BufferedReader(new InputStreamReader(conn.getInputStream()))
-                            .lines().collect(Collectors.joining("\n"));
-                }
-            };
+                    System.out.println("sent");
 
-            getResponseTask.setOnSucceeded(event1 -> {
-                text.setText(event1.getSource().getValue().toString());
+                    System.out.println(new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                            .lines().collect(Collectors.joining("\n")) + calls);
+                    calls += 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return null;
             });
 
-            Thread th = new Thread(getResponseTask);
-            th.start();
-
-        });
-        grid.getChildren().add(submit);
-
-        Scene scene = new Scene(grid, grid.getPrefWidth(), grid.getPrefHeight());
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    @Override
-    public void stop() throws Exception {
-        super.stop();
-        executor.shutdown();
-    }
-
-    public static void main(String[] args) {
-        Application.launch(args);
+        executor.invokeAll(tasks, 30, TimeUnit.SECONDS);
+        System.out.println(executor.isTerminated());
+        System.out.println(executor.isShutdown());
     }
 }
