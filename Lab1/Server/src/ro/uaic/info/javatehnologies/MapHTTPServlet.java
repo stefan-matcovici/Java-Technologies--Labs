@@ -15,30 +15,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.TimeUnit;
 
 @WebServlet(name = "MapHTTPServlet",
         urlPatterns = "/map",
         initParams = {
-                @WebInitParam(name = "propertiesPath", value = "map.properties")
+                @WebInitParam(name = "propertiesPath", value = "map.properties"),
+                @WebInitParam(name = "synchronisationRequired", value = "false")
         }
 )
 
 public class MapHTTPServlet extends HttpServlet {
 
     private Map<String, Entry> map;
-    private Properties props;
     private OutputStream outputStream;
+    private boolean synchronisationRequired;
 
     @Override
     public void init() throws ServletException {
         super.init();
 //        map = new ConcurrentSkipListMap<>(Comparator.comparing(String::toString));
         map = new TreeMap<>(Comparator.comparing(String::toString));
-        props = new Properties();
 
         String stringPath = getServletConfig().getInitParameter("propertiesPath");
         try {
@@ -48,6 +47,8 @@ public class MapHTTPServlet extends HttpServlet {
             getServletContext().log(String.format("Couldn't create outputstream for file %s: %s", stringPath, e));
             throw new ServletException("IOException in init method");
         }
+
+        synchronisationRequired = Boolean.valueOf(getServletConfig().getInitParameter("synchronisationRequired"));
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,27 +56,15 @@ public class MapHTTPServlet extends HttpServlet {
         String key = request.getParameter("key");
         String value = request.getParameter("value");
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         if (key == null || value == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             store(key, value, timestamp.getTime());
-            if (request.getHeader("User-Agent").contains("Mozilla")) {
+            if (isBrowserRequest(request)) {
                 showList(request, response);
             } else {
-                try (PrintWriter writer = response.getWriter()) {
-                    for (Map.Entry<String, Entry> mapEntry : map.entrySet()) {
-                        writer.append(String.format("%s : %s", mapEntry.getKey(), mapEntry.getValue()));
-                        writer.append("\n");
-                    }
-                    writer.flush();
-                }
+                writeResponse(response);
                 response.setStatus(200);
             }
         }
@@ -84,6 +73,37 @@ public class MapHTTPServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log(request);
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+    }
+
+    private void writeResponse(HttpServletResponse response) throws IOException {
+        try (PrintWriter writer = response.getWriter()) {
+            synchronized (synchronisationRequired ? map : new Object()) {
+                for (Map.Entry<String, Entry> mapEntry : map.entrySet()) {
+                    writer.append(String.format("%s : %s", mapEntry.getKey(), mapEntry.getValue()));
+                    writer.append("\n");
+                }
+            }
+            writer.flush();
+        }
+    }
+
+    private void store(String key, String value, long timestamp) throws IOException {
+        synchronized (synchronisationRequired ? map: new Object()) {
+            map.put(key, new Entry(value, timestamp));
+        }
+        synchronized (synchronisationRequired ? outputStream : new Object()) {
+            outputStream.write(key.getBytes());
+            outputStream.write(":".getBytes());
+            outputStream.write(value.getBytes());
+            outputStream.write("\n".getBytes());
+            outputStream.flush();
+        }
+    }
+
+    private void showList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("map", map);
+        RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
+        rd.forward(request, response);
     }
 
     private void log(HttpServletRequest request) {
@@ -96,10 +116,10 @@ public class MapHTTPServlet extends HttpServlet {
 
     private String logParameterMap(Map<String, String[]> parameterMap) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, String[]> entry: parameterMap.entrySet()) {
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
             stringBuilder.append(entry.getKey())
                     .append(": ");
-            for (String value: entry.getValue()) {
+            for (String value : entry.getValue()) {
                 stringBuilder.append(value)
                         .append(" ");
             }
@@ -108,17 +128,8 @@ public class MapHTTPServlet extends HttpServlet {
         return stringBuilder.toString();
     }
 
-    private void store(String key, String value, long timestamp) throws IOException {
-        map.put(key, new Entry(value, timestamp));
-        props.setProperty(key, value);
-        props.store(outputStream, null);
-
-    }
-
-    private void showList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("map", map);
-        RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
-        rd.forward(request, response);
+    private boolean isBrowserRequest(HttpServletRequest request) {
+        return request.getHeader("User-Agent").contains("Mozilla");
     }
 
     @Override
@@ -128,10 +139,9 @@ public class MapHTTPServlet extends HttpServlet {
         try {
             outputStream.flush();
             outputStream.close();
+            getServletContext().log("Closed file");
         } catch (IOException e) {
             getServletContext().log(String.format("Couldn't close file stream: %s", e));
         }
-
-        getServletContext().log("Closed file");
     }
 }
