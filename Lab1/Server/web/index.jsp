@@ -11,7 +11,7 @@
   <title>Page</title>
 </head>
 <body>
-<form method="POST" action="MapHTTPServlet">
+<form method="POST" action="map">
   Key:
   <input type="text" name="key" size="20" value=""/> <br/>
   Value:

@@ -1,4 +1,5 @@
-<%@ page import="java.util.Map" %><%--
+<%@ page import="java.util.Map" %>
+<%@ page import="ro.uaic.info.javatehnologies.Entry" %><%--
   Created by IntelliJ IDEA.
   User: smatcovici
   Date: 7/30/2018
@@ -13,8 +14,8 @@
 <body>
 
 <ul>
-    <% Map<String, String> map = (Map<String, String>) request.getAttribute("map");
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+    <% Map<String, Entry> map = (Map<String, Entry>) request.getAttribute("map");
+        for (Map.Entry<String, Entry> entry : map.entrySet()) {
     %>
     <li><%=entry.getKey()%> <%=entry.getValue()%></li>
     <% }%>

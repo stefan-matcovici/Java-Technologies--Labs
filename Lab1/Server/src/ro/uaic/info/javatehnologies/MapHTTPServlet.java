@@ -14,14 +14,14 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.TreeMap;
 
 @WebServlet(name = "MapHTTPServlet",
-        urlPatterns = "/",
+        urlPatterns = "/map",
         initParams = {
                 @WebInitParam(name = "propertiesPath", value = "map.properties")
         }
@@ -29,13 +29,16 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 public class MapHTTPServlet extends HttpServlet {
 
-    private Map<String, String> map = new ConcurrentSkipListMap<>(Comparator.comparing(String::toString));
-    private Properties props = new Properties();
+    private Map<String, Entry> map;
+    private Properties props;
     private OutputStream outputStream;
 
     @Override
     public void init() throws ServletException {
         super.init();
+//        map = new ConcurrentSkipListMap<>(Comparator.comparing(String::toString));
+        map = new TreeMap<>(Comparator.comparing(String::toString));
+        props = new Properties();
 
         String stringPath = getServletConfig().getInitParameter("propertiesPath");
         try {
@@ -61,13 +64,15 @@ public class MapHTTPServlet extends HttpServlet {
         if (key == null || value == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } else {
-            store(key, value);
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            store(key, value, timestamp.getTime());
             if (request.getHeader("User-Agent").contains("Mozilla")) {
                 showList(request, response);
             } else {
                 try (PrintWriter writer = response.getWriter()) {
-                    for (Map.Entry<String, String> entry : map.entrySet()) {
-                        writer.append(String.format("%s : %s\n", entry.getKey(), entry.getValue()));
+                    for (Map.Entry<String, Entry> mapEntry : map.entrySet()) {
+                        writer.append(String.format("%s : %s", mapEntry.getKey(), mapEntry.getValue()));
+                        writer.append("\n");
                     }
                     writer.flush();
                 }
@@ -78,6 +83,7 @@ public class MapHTTPServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log(request);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     private void log(HttpServletRequest request) {
@@ -102,13 +108,11 @@ public class MapHTTPServlet extends HttpServlet {
         return stringBuilder.toString();
     }
 
-    private void store(String key, String value) throws IOException {
-        map.put(key, value);
+    private void store(String key, String value, long timestamp) throws IOException {
+        map.put(key, new Entry(value, timestamp));
         props.setProperty(key, value);
+        props.store(outputStream, null);
 
-        synchronized (outputStream) {
-            props.store(outputStream, null);
-        }
     }
 
     private void showList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
