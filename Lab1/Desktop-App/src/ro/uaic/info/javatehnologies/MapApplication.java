@@ -1,23 +1,19 @@
 package ro.uaic.info.javatehnologies;
 
-import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class MapApplication {
-
-    public static int calls = 0;
 
     public static void main(String... args) throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(100);
@@ -29,7 +25,7 @@ public class MapApplication {
                     URLConnection urlConnection = url.openConnection();
                     urlConnection.setDoOutput(true);
 
-                    String urlParameters = String.format("key=%s&value=%s", "yes"+String.valueOf(calls), "yes");
+                    String urlParameters = String.format("key=%s&value=%s", "yes" + new Date().getTime(), "yes");
                     byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
                     int postDataLength = postData.length;
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -47,9 +43,9 @@ public class MapApplication {
 
                     System.out.println("sent");
 
-                    System.out.println(new BufferedReader(new InputStreamReader(conn.getInputStream()))
-                            .lines().collect(Collectors.joining("\n")) + calls);
-                    calls += 1;
+                    System.out.println(conn.getResponseCode());
+                    // System.out.println(new BufferedReader(new InputStreamReader(conn.getInputStream()))
+                    //         .lines().collect(Collectors.joining("\n")));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -58,7 +54,10 @@ public class MapApplication {
             });
 
         executor.invokeAll(tasks, 30, TimeUnit.SECONDS);
-        System.out.println(executor.isTerminated());
-        System.out.println(executor.isShutdown());
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+
+        }
+        System.out.println("\nFinished all threads");
     }
 }

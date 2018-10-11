@@ -107,11 +107,22 @@ public class MapHTTPServlet extends HttpServlet {
     }
 
     private void log(HttpServletRequest request) {
-        getServletContext().log(String.format("\nMethod used: %s\n\"Client ip: %s\nUser Agent: %s\nClient language:" +
-                        " %s\nParameters: %s", request.getMethod(), request.getRemoteAddr(),
-                request.getHeader("User-Agent"), request.getLocale().toString(),
+        getServletContext().log(String.format("\nMethod used: %s\n\"Client ip: %s\nUser Agent: %s\nClient languages: %s\nParameters: %s",
+                request.getMethod(),
+                request.getRemoteAddr(),
+                request.getHeader("User-Agent"),
+                logLocales(request.getLocales()),
                 logParameterMap(request.getParameterMap())));
 
+    }
+
+    private String logLocales(Enumeration<Locale> locales) {
+        StringBuilder stringBuilder = new StringBuilder();
+        while (locales.hasMoreElements()) {
+            stringBuilder.append(locales.nextElement().getLanguage()).append(", ");
+        }
+
+        return stringBuilder.subSequence(0, stringBuilder.length()-2).toString();
     }
 
     private String logParameterMap(Map<String, String[]> parameterMap) {
