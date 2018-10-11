@@ -1,5 +1,6 @@
 <%@ page import="ro.uaic.info.javatechnologies.Categories" %>
-<%@ page import="java.util.Enumeration" %><%--
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.util.Arrays" %><%--
   Created by IntelliJ IDEA.
   User: smatcovici
   Date: 7/30/2018
@@ -12,12 +13,22 @@
     <title>Page</title>
 </head>
 <body>
-<form method="POST" action="StoreServlet">
+<form method="POST" action="store">
     <jsp:useBean id="categories" scope="request" class="ro.uaic.info.javatechnologies.Categories"/>
     <select name="categorySelect" id="categorySelect">
         <%
+            String preSelectedCategory = null;
+            Cookie cookies[] = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie: cookies) {
+                    if (cookie.getName().equals("StoreServlet.category")) {
+                        preSelectedCategory = cookie.getValue();
+                    }
+                }
+            }
+
             for (String category : categories.getCategories()) {
-                out.println(String.format("<option>%s</option>", category));
+                out.println(String.format("<option value=\"%s\" %s>%s</option>", category, category.equals(preSelectedCategory) ? "selected" : "", category));
             }
         %>
     </select>
