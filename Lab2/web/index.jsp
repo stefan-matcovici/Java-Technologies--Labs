@@ -38,6 +38,10 @@
     Name:
     <input type="text" name="name" size="20" value=""/> <br/>
 
+    Captcha:<br />
+    <img src="/captcha"/> <br />
+    <input type="text" name="captcha" size="20" value=""/> <br/>
+
     <input type="submit" name="submit" value="Submit">
 </form>
 </body>

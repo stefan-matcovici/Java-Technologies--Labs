@@ -18,6 +18,7 @@ public class StoreServlet extends HttpServlet {
         String category = request.getParameter("categorySelect");
         String key = request.getParameter("key");
         String name = request.getParameter("name");
+        String captchaString = request.getParameter("captcha");
 
         Record record = new Record();
         record.setCategory(category);
@@ -26,6 +27,11 @@ public class StoreServlet extends HttpServlet {
 
 
         HttpSession session = request.getSession(true);
+
+        if (!captchaString.equals(session.getAttribute("CaptchaServlet.captchaString"))) {
+            throw new ServletException("Captcha string different from what you have entered");
+        }
+
         List<Record> records = (List<Record>) session.getAttribute("StoreServlet.records");
         if (records == null) {
             records = new ArrayList<>();

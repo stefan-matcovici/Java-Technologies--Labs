@@ -39,5 +39,7 @@
         }
     %>
 </table>
+
+<a href="../">Back to form</a>
 </body>
 </html>
