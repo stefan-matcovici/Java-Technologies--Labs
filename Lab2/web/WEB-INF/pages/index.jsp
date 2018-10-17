@@ -1,6 +1,7 @@
-<%@ page import="ro.uaic.info.javatechnologies.Categories" %>
+<%@ page import="ro.uaic.info.javatechnologies.models.Categories" %>
 <%@ page import="java.util.Enumeration" %>
-<%@ page import="java.util.Arrays" %><%--
+<%@ page import="java.util.Arrays" %>
+<%@ page import="java.util.Random" %><%--
   Created by IntelliJ IDEA.
   User: smatcovici
   Date: 7/30/2018
@@ -13,8 +14,8 @@
     <title>Page</title>
 </head>
 <body>
-<form method="POST" action="store">
-    <jsp:useBean id="categories" scope="request" class="ro.uaic.info.javatechnologies.Categories"/>
+<form method="POST" action="store" autocomplete="off">
+    <jsp:useBean id="categories" scope="request" class="ro.uaic.info.javatechnologies.models.Categories"/>
     <select name="categorySelect" id="categorySelect">
         <%
             String preSelectedCategory = null;
@@ -39,7 +40,7 @@
     <input type="text" name="name" size="20" value=""/> <br/>
 
     Captcha:<br />
-    <img src="/captcha"/> <br />
+    <img src=<%="/captcha?no-cache=" + new Random().nextInt(1000) %>/> <br />
     <input type="text" name="captcha" size="20" value=""/> <br/>
 
     <input type="submit" name="submit" value="Submit">

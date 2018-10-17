@@ -1,4 +1,4 @@
-package ro.uaic.info.javatechnologies;
+package ro.uaic.info.javatechnologies.models;
 
 public class Categories {
     String[] categories;

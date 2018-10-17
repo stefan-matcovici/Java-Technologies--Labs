@@ -1,4 +1,4 @@
-<%@ page import="ro.uaic.info.javatechnologies.Record" %>
+<%@ page import="ro.uaic.info.javatechnologies.models.Record" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: smatcovici
@@ -30,12 +30,14 @@
         <th>Key</th>
     </tr>
     <% List<Record> records = (List<Record>) session.getAttribute("StoreServlet.records");
-        for (int i = 0; i < records.size(); i++) {
-            out.print(String.format("<tr>" +
-                    "<td>%s</td>" +
-                    "<td>%s</td>" +
-                    "<td>%s</td>" +
-                    "</tr>", records.get(i).getCategory(), records.get(i).getKey(), records.get(i).getName()));
+        if (records != null) {
+            for (int i = 0; i < records.size(); i++) {
+                out.print(String.format("<tr>" +
+                        "<td>%s</td>" +
+                        "<td>%s</td>" +
+                        "<td>%s</td>" +
+                        "</tr>", records.get(i).getCategory(), records.get(i).getKey(), records.get(i).getName()));
+            }
         }
     %>
 </table>

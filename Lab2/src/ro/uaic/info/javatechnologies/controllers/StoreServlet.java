@@ -1,4 +1,6 @@
-package ro.uaic.info.javatechnologies;
+package ro.uaic.info.javatechnologies.controllers;
+
+import ro.uaic.info.javatechnologies.models.Record;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +11,6 @@ import java.util.List;
 
 @WebServlet(name = "StoreServlet", urlPatterns = "/store")
 public class StoreServlet extends HttpServlet {
-    @Override
-    public void init() throws ServletException {
-        super.init();
-    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String category = request.getParameter("categorySelect");
@@ -38,7 +36,7 @@ public class StoreServlet extends HttpServlet {
         }
 
         if (records.stream().anyMatch(r -> r.getKey().equals(key))) {
-            throw new ServletException("Ai gresit!");
+            throw new ServletException(String.format("Key %s already exists. Please choose another one!", key));
         }
 
         records.add(record);
@@ -55,6 +53,6 @@ public class StoreServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
     }
 }

@@ -1,4 +1,4 @@
-package ro.uaic.info.javatechnologies;
+package ro.uaic.info.javatechnologies.controllers;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
