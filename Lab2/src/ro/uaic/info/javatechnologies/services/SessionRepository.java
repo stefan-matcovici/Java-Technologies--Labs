@@ -1,5 +1,6 @@
 package ro.uaic.info.javatechnologies.services;
 
+import ro.uaic.info.javatechnologies.exceptions.KeyAlreadyExistsServletException;
 import ro.uaic.info.javatechnologies.models.Record;
 
 import javax.servlet.ServletException;
@@ -19,7 +20,7 @@ public class SessionRepository implements Repository {
         }
 
         if (records.stream().anyMatch(r -> r.getKey().equals(record.getKey()))) {
-            throw new ServletException(String.format("Key %s already exists. Please choose another one!", record.getKey()));
+            throw new KeyAlreadyExistsServletException(record.getKey());
         }
 
         records.add(record);

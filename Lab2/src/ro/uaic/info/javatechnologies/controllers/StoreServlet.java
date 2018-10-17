@@ -1,5 +1,7 @@
 package ro.uaic.info.javatechnologies.controllers;
 
+import ro.uaic.info.javatechnologies.exceptions.EmptyFormAttributeServletException;
+import ro.uaic.info.javatechnologies.exceptions.WrongCaptchaServletException;
 import ro.uaic.info.javatechnologies.models.Record;
 import ro.uaic.info.javatechnologies.services.Repository;
 import ro.uaic.info.javatechnologies.services.SessionRepository;
@@ -27,8 +29,8 @@ public class StoreServlet extends HttpServlet {
         String key = request.getParameter("key");
         String name = request.getParameter("name");
 
-        if (category == null || key == null || name == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        if (category == null || category.isEmpty() || key == null || key.isEmpty() || name == null || name.isEmpty()) {
+            throw new EmptyFormAttributeServletException();
         } else {
             Record record = new Record();
             record.setCategory(category);
@@ -47,7 +49,7 @@ public class StoreServlet extends HttpServlet {
     private void isCaptchaStringMatching(String captchaString, HttpServletRequest request) throws ServletException {
         HttpSession session = request.getSession(true);
         if (!captchaString.equals(session.getAttribute("CaptchaServlet.captchaString"))) {
-            throw new ServletException("Captcha string different from what you have entered");
+            throw new WrongCaptchaServletException();
         }
     }
 
