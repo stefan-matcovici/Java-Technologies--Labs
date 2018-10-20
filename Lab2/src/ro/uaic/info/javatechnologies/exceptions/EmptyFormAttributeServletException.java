@@ -1,8 +1,8 @@
 package ro.uaic.info.javatechnologies.exceptions;
 
-import java.util.ServiceConfigurationError;
+import javax.servlet.ServletException;
 
-public class EmptyFormAttributeServletException extends ServiceConfigurationError {
+public class EmptyFormAttributeServletException extends ServletException {
     public EmptyFormAttributeServletException() {
         super("All the form's attributes are required, please fill them in!");
     }
