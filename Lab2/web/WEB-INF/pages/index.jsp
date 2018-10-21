@@ -27,7 +27,7 @@
                     }
                 }
             }
-
+            out.println("<option value=\"\"></option>");
             for (String category : categories.getCategories()) {
                 out.println(String.format("<option value=\"%s\" %s>%s</option>", category, category.equals(preSelectedCategory) ? "selected" : "", category));
             }

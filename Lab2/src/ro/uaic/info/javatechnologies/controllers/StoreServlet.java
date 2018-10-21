@@ -29,21 +29,18 @@ public class StoreServlet extends HttpServlet {
         String key = request.getParameter("key");
         String name = request.getParameter("name");
 
-        if (category == null || category.isEmpty() || key == null || key.isEmpty() || name == null || name.isEmpty()) {
-            throw new EmptyFormAttributeServletException();
-        } else {
-            Record record = new Record();
-            record.setCategory(category);
-            record.setKey(key);
-            record.setName(name);
-            repository.storeRecord(request, record);
+        Record record = new Record();
+        record.setCategory(category);
+        record.setKey(key);
+        record.setName(name);
+        repository.storeRecord(request, record);
 
-            Cookie cookie = new Cookie("StoreServlet.category", category);
-            cookie.setMaxAge(30 * 60);
-            response.addCookie(cookie);
+        Cookie cookie = new Cookie("StoreServlet.category", category);
+        cookie.setMaxAge(30 * 60);
+        response.addCookie(cookie);
 
-            getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
-        }
+        getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
+
     }
 
     private void isCaptchaStringMatching(String captchaString, HttpServletRequest request) throws ServletException {
