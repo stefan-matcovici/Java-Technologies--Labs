@@ -44,6 +44,9 @@ public class ValidatorFilter implements Filter {
                 };
                 filterChain.doFilter(decoratedRequest, servletResponse);
             }
+            else {
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
         }
     }
 

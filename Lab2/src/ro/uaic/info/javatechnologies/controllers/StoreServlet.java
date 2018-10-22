@@ -42,7 +42,7 @@ public class StoreServlet extends HttpServlet {
         cookie.setMaxAge(30 * 60);
         response.addCookie(cookie);
 
-        getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/resultView.jsp").forward(request, response);
 
     }
 
@@ -54,6 +54,6 @@ public class StoreServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        getServletContext().getRequestDispatcher("/result.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/resultView.jsp").forward(request, response);
     }
 }
