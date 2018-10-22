@@ -1,12 +1,10 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ro.uaic.info.javatechnologies.models.Record" %>
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: smatcovici
-  Date: 9/5/2018
-  Time: 9:38 AM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="clientLocale" value="${pageContext.request.locale}" />
+<fmt:setBundle basename="ro.uaic.info.javatechnologies.messages" var="msg" scope="page"/>
 <html>
 <head>
     <title>Result</title>
@@ -25,9 +23,9 @@
 <body>
 <table>
     <tr>
-        <th>Category</th>
-        <th>Name</th>
-        <th>Key</th>
+        <th><fmt:message key="category" bundle="${msg}"/></th>
+        <th><fmt:message key="key" bundle="${msg}"/></th>
+        <th><fmt:message key="name" bundle="${msg}"/></th>
     </tr>
     <% List<Record> records = (List<Record>) session.getAttribute("StoreServlet.records");
         if (records != null) {
@@ -42,6 +40,6 @@
     %>
 </table>
 
-<a href="../">Back to form</a>
+<a href="../"><fmt:message key="back" bundle="${msg}"/></a>
 </body>
 </html>

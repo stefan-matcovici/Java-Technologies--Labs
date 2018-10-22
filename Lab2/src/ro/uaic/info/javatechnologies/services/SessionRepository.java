@@ -8,11 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class SessionRepository implements Repository {
 
     @Override
-    public void storeRecord(HttpServletRequest request, Record record) throws ServletException {
+    public void storeRecord(HttpServletRequest request, Record record, ResourceBundle resourceBundle) throws ServletException {
         HttpSession session = request.getSession(true);
         List<Record> records = (List<Record>) session.getAttribute("StoreServlet.records");
         if (records == null) {
@@ -20,7 +21,7 @@ public class SessionRepository implements Repository {
         }
 
         if (records.stream().anyMatch(r -> r.getKey().equals(record.getKey()))) {
-            throw new KeyAlreadyExistsServletException(record.getKey());
+            throw new ServletException(resourceBundle.getString("key-already-exists") + record.getKey());
         }
 
         records.add(record);

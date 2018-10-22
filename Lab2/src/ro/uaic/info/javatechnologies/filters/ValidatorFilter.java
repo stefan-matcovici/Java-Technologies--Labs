@@ -18,7 +18,7 @@ public class ValidatorFilter implements Filter {
     private String defaultCategory;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) throws  ServletException {
         this.defaultCategory = filterConfig.getInitParameter("defaultCategory");
     }
 

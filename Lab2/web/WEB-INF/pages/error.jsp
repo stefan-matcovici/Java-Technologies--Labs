@@ -1,11 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Stefan
-  Date: 10/11/2018
-  Time: 1:00 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page isErrorPage="true" contentType="text/html; ISO-8859-1"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="clientLocale" value="${pageContext.request.locale}" />
+<fmt:setBundle basename="ro.uaic.info.javatechnologies.messages" var="msg" scope="page"/>
 <html>
 <head>
     <style>
@@ -16,8 +13,8 @@
     </style>
 </head>
 <body>
-    <h1>Error!</h1>
+    <h1><fmt:message key="error" bundle="${msg}"/>!</h1>
     <h2><%=exception.getMessage()%></h2>
-    <a href="../">Back to form</a>
+    <a href="../"><fmt:message key="back" bundle="${msg}"/></a>
 </body>
 </html>

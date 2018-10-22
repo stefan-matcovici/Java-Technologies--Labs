@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 @WebServlet(name = "StoreServlet", urlPatterns = "/store")
 public class StoreServlet extends HttpServlet {
@@ -19,11 +20,13 @@ public class StoreServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         repository = new SessionRepository();
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("ro.uaic.info.javatechnologies.messages", request.getLocale());
         String captchaString = request.getParameter("captcha");
-        isCaptchaStringMatching(captchaString, request);
+        isCaptchaStringMatching(captchaString, request, resourceBundle);
 
         String category = request.getParameter("categorySelect");
         String key = request.getParameter("key");
@@ -33,7 +36,7 @@ public class StoreServlet extends HttpServlet {
         record.setCategory(category);
         record.setKey(key);
         record.setName(name);
-        repository.storeRecord(request, record);
+        repository.storeRecord(request, record, resourceBundle);
 
         Cookie cookie = new Cookie("StoreServlet.category", category);
         cookie.setMaxAge(30 * 60);
@@ -43,10 +46,10 @@ public class StoreServlet extends HttpServlet {
 
     }
 
-    private void isCaptchaStringMatching(String captchaString, HttpServletRequest request) throws ServletException {
+    private void isCaptchaStringMatching(String captchaString, HttpServletRequest request, ResourceBundle resourceBundle) throws ServletException {
         HttpSession session = request.getSession(true);
         if (!captchaString.equals(session.getAttribute("CaptchaServlet.captchaString"))) {
-            throw new WrongCaptchaServletException();
+            throw new ServletException(resourceBundle.getString("invalid-captcha"));
         }
     }
 
