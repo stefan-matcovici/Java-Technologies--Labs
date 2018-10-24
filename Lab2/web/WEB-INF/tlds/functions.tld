@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+  http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd">
+    <tlib-version>1.0</tlib-version>
+    <short-name>func</short-name>
+    <uri>/WEB-INF/tlds/functions</uri>
+
+    <function>
+        <name>filterByCategory</name>
+        <function-class>
+            ro.uaic.info.javatechnologies.tlds.Functions
+        </function-class>
+        <function-signature>
+            java.util.List filterByCategory(java.util.List,java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>filterByDate</name>
+        <function-class>
+            ro.uaic.info.javatechnologies.tlds.Functions
+        </function-class>
+        <function-signature>
+            java.lang.String filterByDate(java.util.List)
+        </function-signature>
+    </function>
+
+</taglib>

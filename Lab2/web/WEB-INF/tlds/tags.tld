@@ -1,0 +1,24 @@
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/jsee/web-jsptagLibrary_2_0.xsd" version="2.0">
+    <tlib-version>1.0</tlib-version>
+    <short-name>mylibrary</short-name>
+    <uri>/WEB-INF/tlds/tags</uri>
+    <tag>
+        <name>record-value</name>
+        <tag-class>ro.uaic.info.javatechnologies.tags.RecordTagHandler</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>category</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+</taglib>

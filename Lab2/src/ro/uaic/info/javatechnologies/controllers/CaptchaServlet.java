@@ -85,7 +85,7 @@ public class CaptchaServlet extends HttpServlet {
 
     private static String generateCaptchaString() {
         Random random = new Random();
-        int length = 7 + (Math.abs(random.nextInt()) % 3);
+        int length = 2 + (Math.abs(random.nextInt()) % 3);
 
         StringBuilder captchaStringBuffer = new StringBuilder();
         for (int i = 0; i < length; i++) {

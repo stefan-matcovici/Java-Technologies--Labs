@@ -1,9 +1,12 @@
 package ro.uaic.info.javatechnologies.models;
 
+import java.util.Date;
+
 public class Record {
     String category;
     String name;
     String key;
+    Date date;
 
     public Record() {
     }
@@ -30,5 +33,13 @@ public class Record {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

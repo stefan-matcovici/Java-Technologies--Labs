@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 @WebServlet(name = "StoreServlet", urlPatterns = "/store")
@@ -36,6 +37,7 @@ public class StoreServlet extends HttpServlet {
         record.setCategory(category);
         record.setKey(key);
         record.setName(name);
+        record.setDate(new Date());
         repository.storeRecord(request, record, resourceBundle);
 
         Cookie cookie = new Cookie("StoreServlet.category", category);
