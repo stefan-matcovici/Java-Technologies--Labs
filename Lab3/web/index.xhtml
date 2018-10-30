@@ -1,0 +1,46 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <style>
+        .ui-menuitem-text {
+            text-transform: capitalize;
+        }
+    </style>
+</h:head>
+
+
+<h:body>
+    <p:growl id="messages"/>
+
+    <p:menubar>
+        <p:submenu label="#{msgs['index.optional-packages']}" icon="fa fa-fw fa-dropbox">
+            <p:menuitem value="#{msgs['index.add']}" outcome="opt-packages-form" icon="fa fa-fw fa-plus"/>
+            <p:separator/>
+            <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table"/>
+        </p:submenu>
+
+        <p:submenu label="#{msgs['index.lecturers']}" icon="fa fa-fw fa-pencil">
+            <p:menuitem value="#{msgs['index.add']}" outcome="lect-form" icon="fa fa-fw fa-plus"/>
+            <p:separator/>
+            <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table"/>
+        </p:submenu>
+
+        <p:submenu label="#{msgs['index.courses']}" icon="fa fa-fw fa-university">
+            <p:submenu label="#{msgs['index.compulsory']}" icon="fa fa-fw fa-circle">
+                <p:menuitem value="#{msgs['index.add']}" url="#" icon="fa fa-fw fa-plus"/>
+                <p:separator/>
+                <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table"/>
+            </p:submenu>
+            <p:separator/>
+            <p:submenu label="#{msgs['index.optional']}" url="#" icon="fa fa-fw fa-star-half-empty">
+                <p:menuitem value="#{msgs['index.add']}" url="#" icon="fa fa-fw fa-plus"/>
+                <p:separator/>
+                <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table"/>
+            </p:submenu>
+        </p:submenu>
+    </p:menubar>
+</h:body>
+</html>

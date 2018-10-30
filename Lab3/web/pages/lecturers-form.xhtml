@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+
+<h:body>
+
+    <h:form>
+        <p:growl id="growl" sticky="true" showDetail="true"/>
+
+        <p:panel header="#{msgs['lect-form.lecturer-detail']}">
+            <p:messages />
+            <h:panelGrid columns="2" columnClasses="label, value">
+                <h:outputText value="#{msgs['lecturer.firstname']}: *" />
+                <p:inputText value="#{lecturerBean.entity.firstName}" label="Firstname">
+                    <f:validateBean disabled="false"/>
+                </p:inputText>
+            </h:panelGrid>
+            <h:panelGrid columns="2" columnClasses="label, value">
+                <h:outputText value="#{msgs['lecturer.lastname']}: *" />
+                <p:inputText value="#{lecturerBean.entity.lastName}" label="Lastname">
+                    <f:validateBean disabled="false"/>
+                </p:inputText>
+            </h:panelGrid>
+            <h:commandButton value="#{msgs['global.submit']}" action="#{lecturerBean.submit}" />
+        </p:panel>
+    </h:form>
+
+</h:body>
+
+</html>
