@@ -20,6 +20,7 @@
         <th><fmt:message key="category" bundle="${msg}"/></th>
         <th><fmt:message key="key" bundle="${msg}"/></th>
         <th><fmt:message key="name" bundle="${msg}"/></th>
+        <th><fmt:message key="date" bundle="${msg}"/></th>
     </tr>
     <c:forEach var="record" items="${records}">
         <tr>
