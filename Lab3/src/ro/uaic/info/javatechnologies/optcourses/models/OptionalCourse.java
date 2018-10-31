@@ -4,18 +4,18 @@ import java.net.URL;
 
 public class OptionalCourse extends Course {
 
-    private Package optionalPackage;
+    private OptionalPackage optionalPackage;
 
-    public OptionalCourse(String name, int year, int semester, URL url, Lecturer lecturer, int studyGroups, Package optionalPackage) {
+    public OptionalCourse(String name, int year, int semester, URL url, Lecturer lecturer, int studyGroups, OptionalPackage optionalPackage) {
         super(name, year, semester, url, lecturer, studyGroups);
         this.optionalPackage = optionalPackage;
     }
 
-    public Package getOptionalPackage() {
+    public OptionalPackage getOptionalPackage() {
         return optionalPackage;
     }
 
-    public void setOptionalPackage(Package optionalPackage) {
+    public void setOptionalPackage(OptionalPackage optionalPackage) {
         this.optionalPackage = optionalPackage;
     }
 }
