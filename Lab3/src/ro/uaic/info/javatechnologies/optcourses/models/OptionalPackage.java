@@ -1,8 +1,6 @@
 package ro.uaic.info.javatechnologies.optcourses.models;
 
 
-import ro.uaic.info.javatechnologies.optcourses.validation.Enumerated;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -13,6 +11,16 @@ public class OptionalPackage extends AbstractEntity<String> {
     private Integer year;
 
     private Semester semester;
+
+    public OptionalPackage() {
+
+    }
+
+    public OptionalPackage(String id, Integer year, Semester semester) {
+        this.setId(id);
+        this.setSemester(semester);
+        this.setYear(year);
+    }
 
     public Integer getYear() {
         return year;

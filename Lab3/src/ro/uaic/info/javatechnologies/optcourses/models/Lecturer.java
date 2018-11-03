@@ -15,8 +15,10 @@ public class Lecturer extends AbstractEntity<Integer> implements Serializable {
         super();
     }
 
-    public Lecturer(String firstName) {
+    public Lecturer(Integer id, String firstName, String lastName) {
+        this.setId(id);
         this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getFirstName() {

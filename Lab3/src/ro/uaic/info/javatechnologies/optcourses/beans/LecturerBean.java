@@ -3,27 +3,16 @@ package ro.uaic.info.javatechnologies.optcourses.beans;
 import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
 import ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository;
 
-import javax.faces.application.NavigationHandler;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.sql.SQLException;
 
-@ManagedBean(name = "lecturerBean")
-@RequestScoped
-public class LecturerBean extends DataEdit<Lecturer, Integer> {
+@ManagedBean(name = "lecturerAll")
+@ApplicationScoped
+public class LecturerBean {
+    private LecturerRepository lecturerRepository = new LecturerRepository();
 
-    public LecturerBean() {
-        super();
-        entity = new Lecturer();
-        repository = new LecturerRepository();
-    }
-
-    public void submit() throws SQLException, IOException {
-        repository.save((Lecturer) entity);
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        NavigationHandler myNav = facesContext.getApplication().getNavigationHandler();
-        myNav.handleNavigation(facesContext, null, "index");
+    public Lecturer[] getLecturers() throws SQLException {
+        return lecturerRepository.getAll().stream().toArray(Lecturer[]::new);
     }
 }

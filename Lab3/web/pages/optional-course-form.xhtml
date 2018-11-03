@@ -20,31 +20,38 @@
 
         <p:growl id="growl" sticky="true" showDetail="true"/>
 
-        <p:wizard flowListener="#{courseEditBean.onFlowProcess}">
+        <p:wizard flowListener="#{optionalCourseEditbean.onFlowProcess}">
             <p:tab id="compulsory" title="#{msgs['index.compulsory']}">
                 <p:panel header="#{msgs['courses.compulsory-details']}: ">
                     <p:messages/>
                     <h:panelGrid columns="2" columnClasses="label, value">
                         <h:outputText value="#{msgs['course.name']}: "/>
-                        <p:inputText value="#{courseEditBean.entity.name}"/>
+                        <p:inputText value="#{optionalCourseEditbean.entity.name}"/>
 
                         <h:outputText value="#{msgs['opt-package-form.year']}: "/>
-                        <p:inputText value="#{courseEditBean.entity.year}"/>
+                        <p:inputText value="#{optionalCourseEditbean.entity.year}"/>
 
                         <h:outputText value="#{msgs['opt-package-form.semester']}: "/>
-                        <h:selectOneMenu value="#{courseEditBean.entity.semester}" >
+                        <h:selectOneMenu value="#{optionalCourseEditbean.entity.semester}" >
                             <f:selectItems value="#{semesterBean.statuses}" />
                         </h:selectOneMenu>
 
                         <h:outputText value="#{msgs['courses.lecturer']}: "/>
-                        <h:selectOneMenu value="#{courseEditBean.entity.lecturer.id}" >
+                        <h:selectOneMenu value="#{optionalCourseEditbean.entity.lecturer.id}" >
                             <f:selectItems value="#{lecturerAll.lecturers}" var="lecturer"
                                            itemValue="#{lecturer.id}"
                                            itemLabel="#{lecturer.firstName} #{lecturer.lastName}" />
                         </h:selectOneMenu>
 
+                        <h:outputText value="#{msgs['index.optional-packages']}: "/>
+                        <h:selectOneMenu value="#{optionalCourseEditbean.entity.optionalPackage.id}" >
+                            <f:selectItems value="#{optionalPackagesAll.optionalPackages}" var="optionalPackage"
+                                           itemValue="#{optionalPackage.id}"
+                                           itemLabel="#{optionalPackage.id}" />
+                        </h:selectOneMenu>
+
                         <h:outputText value="#{msgs['courses.skip']}: "/>
-                        <h:selectBooleanCheckbox value="#{courseEditBean.skip}"/>
+                        <h:selectBooleanCheckbox value="#{optionalCourseEditbean.skip}"/>
                     </h:panelGrid>
                 </p:panel>
             </p:tab>
@@ -54,10 +61,10 @@
                     <p:messages/>
                     <h:panelGrid columns="2" columnClasses="label, value">
                         <h:outputText value="#{msgs['courses.url']}: "/>
-                        <p:inputText value="#{courseEditBean.entity.url}"/>
+                        <p:inputText value="#{optionalCourseEditbean.entity.url}"/>
 
                         <h:outputText value="#{msgs['courses.study-groups']}: "/>
-                        <p:inputText value="#{courseEditBean.entity.studyGroups}"/>
+                        <p:inputText value="#{optionalCourseEditbean.entity.studyGroups}"/>
                     </h:panelGrid>
                 </p:panel>
             </p:tab>
@@ -67,26 +74,26 @@
                     <h:panelGrid id="confirmation" columns="3" columnClasses="grid,grid,grid">
                         <h:panelGrid columns="2" columnClasses="label, value">
                             <h:outputText value="#{msgs['course.name']}: "/>
-                            <h:outputText value="#{courseEditBean.entity.name}" styleClass="outputLabel"/>
+                            <h:outputText value="#{optionalCourseEditbean.entity.name}" styleClass="outputLabel"/>
 
                             <h:outputText value="#{msgs['opt-package-form.year']}: "/>
-                            <h:outputText value="#{courseEditBean.entity.year}" styleClass="outputLabel"/>
+                            <h:outputText value="#{optionalCourseEditbean.entity.year}" styleClass="outputLabel"/>
 
                             <h:outputText value="#{msgs['opt-package-form.semester']}: "/>
-                            <h:outputText value="#{courseEditBean.entity.semester}" styleClass="outputLabel"/>
+                            <h:outputText value="#{optionalCourseEditbean.entity.semester}" styleClass="outputLabel"/>
                         </h:panelGrid>
 
                         <h:panelGrid columns="2" columnClasses="label, value">
                             <h:outputText value="#{msgs['courses.url']}: "/>
-                            <h:outputText value="#{courseEditBean.entity.url}" styleClass="outputLabel"/>
+                            <h:outputText value="#{optionalCourseEditbean.entity.url}" styleClass="outputLabel"/>
 
                             <h:outputText value="#{msgs['courses.study-groups']}: "/>
-                            <h:outputText value="#{courseEditBean.entity.studyGroups}" styleClass="outputLabel"/>
+                            <h:outputText value="#{optionalCourseEditbean.entity.studyGroups}" styleClass="outputLabel"/>
                         </h:panelGrid>
 
                     </h:panelGrid>
 
-                    <p:commandButton value="#{msgs['global.submit']}" actionListener="#{courseEditBean.submit}" update="growl" process="@this"/>
+                    <p:commandButton value="#{msgs['global.submit']}" actionListener="#{optionalCourseEditbean.submit}" update="growl" process="@this"/>
                 </p:panel>
             </p:tab>
 

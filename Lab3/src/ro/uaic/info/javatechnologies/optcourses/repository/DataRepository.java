@@ -5,10 +5,12 @@ import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 
 public abstract class DataRepository<T extends AbstractEntity<ID>, ID> {
     public abstract T getById(ID id);
     public abstract void save(T t) throws SQLException;
+    public abstract List<T> getAll() throws SQLException;
 
     protected Connection getConnection() {
         Connection con = null;

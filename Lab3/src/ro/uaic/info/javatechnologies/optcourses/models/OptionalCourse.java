@@ -6,7 +6,11 @@ public class OptionalCourse extends Course {
 
     private OptionalPackage optionalPackage;
 
-    public OptionalCourse(String name, int year, int semester, URL url, Lecturer lecturer, int studyGroups, OptionalPackage optionalPackage) {
+    public OptionalCourse() {
+        optionalPackage = new OptionalPackage();
+    }
+
+    public OptionalCourse(String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups, OptionalPackage optionalPackage) {
         super(name, year, semester, url, lecturer, studyGroups);
         this.optionalPackage = optionalPackage;
     }

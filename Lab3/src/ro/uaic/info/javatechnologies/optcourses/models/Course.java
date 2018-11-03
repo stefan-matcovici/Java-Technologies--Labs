@@ -1,17 +1,29 @@
 package ro.uaic.info.javatechnologies.optcourses.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.net.URL;
 
 public class Course extends AbstractEntity<String> {
 
+    @NotEmpty(message = "{course.name.notnull}")
     private String name;
+
+    @Min(value = 1, message = "{opt-package.year.one}")
+    @Max(value = 3, message = "{opt-package.year.three}")
     private int year;
-    private int semester;
+
+    private Semester semester;
     private URL url;
     private Lecturer lecturer;
     private int studyGroups;
 
-    public Course(String name, int year, int semester, URL url, Lecturer lecturer, int studyGroups) {
+    public Course() {
+        lecturer = new Lecturer();
+    }
+
+    public Course(String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups) {
         this.name = name;
         this.year = year;
         this.semester = semester;
@@ -36,11 +48,11 @@ public class Course extends AbstractEntity<String> {
         this.year = year;
     }
 
-    public int getSemester() {
+    public Semester getSemester() {
         return semester;
     }
 
-    public void setSemester(int semester) {
+    public void setSemester(Semester semester) {
         this.semester = semester;
     }
 
