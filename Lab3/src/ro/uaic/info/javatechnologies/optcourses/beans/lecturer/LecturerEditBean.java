@@ -1,18 +1,20 @@
-package ro.uaic.info.javatechnologies.optcourses.beans;
+package ro.uaic.info.javatechnologies.optcourses.beans.lecturer;
 
+import ro.uaic.info.javatechnologies.optcourses.beans.DataEdit;
 import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
 import ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.NavigationHandler;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.SQLException;
 
-@ManagedBean(name = "lecturerBean")
+@Named("lecturerBean")
 @RequestScoped
-public class LecturerEditBean extends DataEdit<Lecturer, Integer> {
+public class LecturerEditBean extends DataEdit<Lecturer, Integer> implements Serializable {
 
     public LecturerEditBean() {
         super();

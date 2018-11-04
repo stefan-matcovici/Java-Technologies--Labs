@@ -1,15 +1,16 @@
-package ro.uaic.info.javatechnologies.optcourses.beans;
+package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
 
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.sql.SQLException;
 
-@ManagedBean(name = "optionalPackagesAll")
-@ApplicationScoped
-public class OptionalPackagesBean {
+@Named("optionalPackagesAll")
+@RequestScoped
+public class OptionalPackagesBean implements Serializable {
     private OptionalPackageRepository optionalPackageRepository = new OptionalPackageRepository();
 
     public OptionalPackage[] getOptionalPackages() throws SQLException {

@@ -1,19 +1,20 @@
-package ro.uaic.info.javatechnologies.optcourses.beans;
+package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
 
 import org.primefaces.context.RequestContext;
+import ro.uaic.info.javatechnologies.optcourses.beans.DataEdit;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 import ro.uaic.info.javatechnologies.optcourses.utils.JSFUtils;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@ManagedBean(name = "optionalPackageBean")
+@Named("optionalPackageBean")
 @RequestScoped
 public class OptionalPackageEditBean extends DataEdit<OptionalPackage, String> {
     public OptionalPackageEditBean() {
