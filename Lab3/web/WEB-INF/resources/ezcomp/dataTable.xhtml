@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xml:lang="en" lang="en">
+<head>
+    <title>Title</title>
+</head>
+<body>
+<cc:interface>
+    <cc:attribute name="title"/>
+    <cc:attribute name="dataView" type="ro.uaic.info.javatechnologies.optcourses.beans.DataView"/>
+</cc:interface>
+<cc:implementation>
+    <p:dataTable id="dataTable"
+                 value="#{cc.attrs.dataView.entities}"
+                 var="entity"
+                 rowKey="#{entity.id}"
+                 selectionMode="single">
+        <p:column headerText="Id">
+            <h:outputText value="#{entity.id}" />
+        </p:column>
+        <!--<p:ajax event="rowDblselect"-->
+                <!--listener="#{cc.attrs.dataView.onRowDblClckSelect}" global="false"/>-->
+        <!--<p:ajax event="rowSelect" listener="#{cc.attrs.dataView.onRowSelect}"-->
+                <!--update="addBtn editBtn removeBtn emailBtn"/>-->
+        <cc:insertFacet name="header"/>
+        <cc:insertChildren/>
+        <f:facet id="footer" name="footer">
+            <p:commandButton id="addBtn" update="dataTable"
+                             action="#{cc.attrs.dataView.add}"/>
+        </f:facet>
+    </p:dataTable>
+</cc:implementation>
+</body>
+</html>

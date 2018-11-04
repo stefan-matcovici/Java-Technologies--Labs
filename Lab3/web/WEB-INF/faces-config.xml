@@ -20,44 +20,50 @@
 
     <!--index-->
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>opt-packages-form</from-outcome>
             <to-view-id>/pages/optional-package-form.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>lect-form</from-outcome>
             <to-view-id>/pages/lecturers-form.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>course-form</from-outcome>
             <to-view-id>/pages/course-form.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>opt-course-form</from-outcome>
             <to-view-id>/pages/optional-course-form.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>lecturer-view</from-outcome>
             <to-view-id>/pages/lecturer-view.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
-
-    <!--lecturers-form-->
     <navigation-rule>
-        <from-view-id>/pages/lecturers-form.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>course-view</from-outcome>
+            <to-view-id>/pages/course-view.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>index</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
@@ -65,44 +71,6 @@
         </navigation-case>
     </navigation-rule>
 
-    <!--optional-packages-form-->
-    <navigation-rule>
-        <from-view-id>/pages/optional-package-form.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
-    <!--courses-form-->
-    <navigation-rule>
-        <from-view-id>/pages/course-form.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
-    <!--optional-courses-form-->
-    <navigation-rule>
-        <from-view-id>/pages/optional-course-form.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-
-    <navigation-rule>
-        <from-view-id>/pages/lecturer-view.xhtml</from-view-id>
-        <navigation-case>
-            <from-outcome>index</from-outcome>
-            <to-view-id>/index.xhtml</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
 
   
 </faces-config>

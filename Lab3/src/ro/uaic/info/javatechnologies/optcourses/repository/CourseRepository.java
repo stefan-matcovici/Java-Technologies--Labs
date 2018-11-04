@@ -1,15 +1,19 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
 import ro.uaic.info.javatechnologies.optcourses.models.Course;
+import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
+import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseRepository extends DataRepository<Course, String> {
 
     private static final String addCourseQuery = "INSERT INTO public.\"COURSES\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
+    private static final String getAllCoursesQuery = "SELECT * FROM public.\"COURSES\"";
 
     @Override
     public Course getById(String s) {
@@ -31,7 +35,21 @@ public class CourseRepository extends DataRepository<Course, String> {
     }
 
     @Override
-    public List<Course> getAll() {
-        return null;
+    public List<Course> getAll() throws SQLException, MalformedURLException {
+        Connection con = getConnection();
+        Statement statement = con.createStatement();
+        ResultSet rs = statement.executeQuery(getAllCoursesQuery);
+        List<Course> courses = new ArrayList<>();
+        while (rs.next()) {
+            courses.add(new Course(rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getInt("year"),
+                    Semester.valueOf(rs.getString("semester").toUpperCase()),
+                    new URL(rs.getString("url")),
+                    new Lecturer(),
+                    rs.getInt("study_groups")));
+        }
+
+        return courses;
     }
 }

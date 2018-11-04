@@ -23,6 +23,16 @@ public class Course extends AbstractEntity<String> {
         lecturer = new Lecturer();
     }
 
+    public Course(String id, String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups) {
+        super(id);
+        this.name = name;
+        this.year = year;
+        this.semester = semester;
+        this.url = url;
+        this.lecturer = lecturer;
+        this.studyGroups = studyGroups;
+    }
+
     public Course(String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups) {
         this.name = name;
         this.year = year;
