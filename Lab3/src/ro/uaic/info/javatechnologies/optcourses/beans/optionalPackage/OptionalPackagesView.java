@@ -1,0 +1,56 @@
+package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
+
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
+import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
+import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
+import ro.uaic.info.javatechnologies.optcourses.models.Semester;
+import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
+
+import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Named("optPackagesView")
+@ViewScoped
+public class OptionalPackagesView implements Serializable {
+    private TreeNode root;
+
+    @PostConstruct
+    public void init() {
+        root = new DefaultTreeNode("Years", null);
+
+        OptionalPackageRepository repository = new OptionalPackageRepository();
+        List<OptionalPackage> optionalPackages = null;
+        try {
+            optionalPackages = repository.getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Set<Integer> years = optionalPackages.stream().map(OptionalPackage::getYear).collect(Collectors.toSet());
+        for (Integer year: years) {
+            TreeNode yearNode = new DefaultTreeNode(year, root);
+            Set<Semester> semesters = optionalPackages.stream().filter(optionalPackage -> optionalPackage.getYear().equals(year))
+                    .map(OptionalPackage::getSemester).collect(Collectors.toSet());
+            for (Semester semester: semesters) {
+                TreeNode semesterNode = new DefaultTreeNode(semester.getName(), yearNode);
+                optionalPackages.stream().filter(optionalPackage -> optionalPackage.getYear().equals(year) && optionalPackage.getSemester().equals(semester))
+                        .map(AbstractEntity::getId)
+                        .forEach(courseId -> {
+                            TreeNode courseNode = new DefaultTreeNode(courseId, semesterNode);
+                        });
+            }
+
+        }
+
+    }
+
+    public TreeNode getRoot() {
+        return root;
+    }
+}
