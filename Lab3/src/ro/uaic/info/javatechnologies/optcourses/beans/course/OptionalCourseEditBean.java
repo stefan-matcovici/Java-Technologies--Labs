@@ -6,16 +6,13 @@ import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalCourse;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalCourseRepository;
 
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import java.io.IOException;
-import java.sql.SQLException;
 
 @Named("optionalCourseEditbean")
-@RequestScoped
+@ViewScoped
 public class OptionalCourseEditBean extends DataEdit<OptionalCourse, String> {
     private boolean skip;
 
@@ -38,13 +35,6 @@ public class OptionalCourseEditBean extends DataEdit<OptionalCourse, String> {
     public void save() {
         FacesMessage msg = new FacesMessage("Successful", "Welcome :" + ((Course) entity).getName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void submit() throws SQLException, IOException {
-        repository.save((OptionalCourse) entity);
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        NavigationHandler myNav = facesContext.getApplication().getNavigationHandler();
-        myNav.handleNavigation(facesContext, null, "index");
     }
 
     public boolean isSkip() {

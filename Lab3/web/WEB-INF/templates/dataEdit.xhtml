@@ -1,0 +1,22 @@
+<ui:composition template="/WEB-INF/templates/page.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <p:panel header="#{headerTitle}">
+            <h:form id="dataEditForm">
+                <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+                <ui:insert name="dataEditContent">
+                    Data editor
+                </ui:insert>
+                <p:focus id="formFocus" context="dataEditForm"/>
+                <h:panelGrid id="dataEditButtons" columns="2">
+                    <p:commandButton id="saveBtn" value="#{msgs['global.submit']}" action="#{dataEditBean.submit}" />
+                    <h:button id="cancelBtn" value="#{msgs['global.cancel']}" outcome="index" immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

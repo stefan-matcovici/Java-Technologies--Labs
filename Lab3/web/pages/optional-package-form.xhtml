@@ -1,8 +1,11 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-<h:head>
+<ui:composition template="/WEB-INF/templates/dataEdit.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:param name="dataEditBean" value="#{optionalPackageBean}"/>
+<ui:param name = "title" value = "Home" />
+<ui:param name="headerTitle" value="#{msgs['opt-package-form.package-detail']}"/>
+<ui:define name="dataEditContent">
     <style>
         .label {
             text-transform: capitalize;
@@ -11,39 +14,24 @@
             text-transform: capitalize;
         }
     </style>
-</h:head>
+    <h:panelGrid columns="2" columnClasses="label, value">
+        <h:outputText value="#{msgs['opt-package-form.code']}: *" />
+        <p:inputText value="#{optionalPackageBean.entity.id}" label="Code">
+            <f:validateBean disabled="false"/>
+        </p:inputText>
+    </h:panelGrid>
+    <h:panelGrid columns="2" columnClasses="label, value">
+        <h:outputText value="#{msgs['opt-package-form.year']}: *" />
+        <p:inputText value="#{optionalPackageBean.entity.year}" label="Year">
+            <f:validateBean disabled="false"/>
+        </p:inputText>
+    </h:panelGrid>
+    <h:panelGrid columns="2" columnClasses="label, value">
+        <h:outputText value="#{msgs['opt-package-form.semester']}: *" />
+        <h:selectOneMenu value="#{optionalPackageBean.entity.semester}" >
+            <f:selectItems value="#{semesterBean.statuses}" />
+        </h:selectOneMenu>
+    </h:panelGrid>
 
-
-<h:body>
-
-    <h:form>
-        <p:growl id="growl" sticky="true" showDetail="true"/>
-
-        <p:panel header="#{msgs['opt-package-form.package-detail']}">
-            <p:messages />
-            <h:panelGrid columns="2" columnClasses="label, value">
-                <h:outputText value="#{msgs['opt-package-form.code']}: *" />
-                <p:inputText value="#{optionalPackageBean.entity.id}" label="Code">
-                    <f:validateBean disabled="false"/>
-                </p:inputText>
-            </h:panelGrid>
-            <h:panelGrid columns="2" columnClasses="label, value">
-                <h:outputText value="#{msgs['opt-package-form.year']}: *" />
-                <p:inputText value="#{optionalPackageBean.entity.year}" label="Year">
-                    <f:validateBean disabled="false"/>
-                </p:inputText>
-            </h:panelGrid>
-            <h:panelGrid columns="2" columnClasses="label, value">
-                <h:outputText value="#{msgs['opt-package-form.semester']}: *" />
-                <h:selectOneMenu value="#{optionalPackageBean.entity.semester}" >
-                    <f:selectItems value="#{semesterBean.statuses}" />
-                </h:selectOneMenu>
-            </h:panelGrid>
-            <h:commandButton value="#{msgs['global.submit']}" action="#{optionalPackageBean.submit}" />
-        </p:panel>
-    </h:form>
-    <p:link outcome="index" value="Back to menu"/>
-
-</h:body>
-
-</html>
+</ui:define>
+</ui:composition>
