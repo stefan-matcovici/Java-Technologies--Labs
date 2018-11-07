@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:composite="http://xmlns.jcp.org/jsf/composite" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xml:lang="en" lang="en">
 <head>
     <title>Title</title>
 </head>
@@ -11,12 +13,20 @@
     <style>
         footer {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
         }
 
     </style>
     <footer>
         <small>&#169; Copyright 2018, Stefan Matcovici</small>
+        <h:form id="form1">
+        <p:poll interval="3"
+                listener="#{counterBean.getSessions}"
+                update="counter" />
+            <h:outputText id="counter"
+                          value="#{msgs['global.no-of-sessions']}: #{counterBean.count}" />
+        </h:form>
+
     </footer>
 </composite:implementation>
 </body>

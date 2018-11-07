@@ -37,4 +37,12 @@ public class OptionalPackage extends AbstractEntity<String> {
     public void setSemester(Semester semester) {
         this.semester = semester;
     }
+
+    @Override
+    public String toString() {
+        return "OptionalPackage{" +
+                "year=" + year +
+                ", semester=" + semester +
+                '}';
+    }
 }
