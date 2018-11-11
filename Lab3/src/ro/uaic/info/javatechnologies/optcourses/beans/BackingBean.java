@@ -7,7 +7,7 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 public abstract class BackingBean<T extends AbstractEntity<ID>, ID> {
-    @Resource(mappedName = "jdbc/courses")
+    @Resource(name = "opt-courses")
     DataSource dataSource;
 
     public void init() {

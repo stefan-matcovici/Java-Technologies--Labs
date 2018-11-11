@@ -1,0 +1,6 @@
+<glassfish-web-app error-url="">
+    <resource-ref>
+        <res-ref-name>opt-courses</res-ref-name>
+        <jndi-name>jdbc/courses</jndi-name>
+    </resource-ref>
+</glassfish-web-app>
