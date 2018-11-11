@@ -14,6 +14,7 @@ public class CourseRepository extends DataRepository<Course, String> {
 
     private static final String addCourseQuery = "INSERT INTO public.\"COURSES\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
     private static final String getAllCoursesQuery = "SELECT * FROM public.\"COURSES\"";
+    private static final String updateEntityQuery = "UPDATE public.\"COURSES\" SET name=?, year=?, semester=?, url=?, study_groups=? WHERE id=?;";
 
     @Override
     public Course getById(String s) {
@@ -51,5 +52,22 @@ public class CourseRepository extends DataRepository<Course, String> {
         }
 
         return courses;
+    }
+
+    @Override
+    public void updateEntities(List<Course> entities) throws SQLException {
+        Connection con = getConnection();
+        PreparedStatement pst = con.prepareStatement(updateEntityQuery);
+        for (Course entity: entities) {
+            pst.setString(1, entity.getName());
+            pst.setInt(2, entity.getYear());
+            pst.setString(3, entity.getSemester().getName());
+            pst.setString(4, entity.getUrl() != null ? entity.getUrl().toString(): null);
+            // pst.setInt(5, entity.getLecturer() != null ? entity.getLecturer().getId(): 0);
+            pst.setInt(5, entity.getStudyGroups());
+            pst.setString(6, entity.getId());
+
+            pst.executeUpdate();
+        }
     }
 }

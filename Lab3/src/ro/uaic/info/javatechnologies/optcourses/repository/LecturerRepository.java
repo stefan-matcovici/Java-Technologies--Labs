@@ -38,4 +38,9 @@ public class LecturerRepository extends DataRepository<Lecturer, Integer> {
 
         return lecturers;
     }
+
+    @Override
+    public void updateEntities(List<Lecturer> entities) throws SQLException {
+
+    }
 }

@@ -2,6 +2,7 @@ package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import ro.uaic.info.javatechnologies.optcourses.beans.BackingBean;
 import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
@@ -18,18 +20,23 @@ import java.util.stream.Collectors;
 
 @Named("optPackagesView")
 @ViewScoped
-public class OptionalPackagesView implements Serializable {
+public class OptionalPackagesView extends  BackingBean<OptionalPackage, String> implements Serializable {
     private TreeNode root;
+
+    public OptionalPackagesView() {
+        super();
+        repository = new OptionalPackageRepository();
+    }
 
     @PostConstruct
     public void init() {
+        super.init();
         root = new DefaultTreeNode("Years", null);
 
-        OptionalPackageRepository repository = new OptionalPackageRepository();
         List<OptionalPackage> optionalPackages = null;
         try {
             optionalPackages = repository.getAll();
-        } catch (SQLException e) {
+        } catch (SQLException | MalformedURLException e) {
             e.printStackTrace();
         }
         Set<Integer> years = optionalPackages.stream().map(OptionalPackage::getYear).collect(Collectors.toSet());

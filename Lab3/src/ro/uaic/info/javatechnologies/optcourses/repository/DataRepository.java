@@ -1,34 +1,28 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import com.sun.org.glassfish.gmbal.ManagedObject;
 import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
 
+import javax.sql.DataSource;
 import java.net.MalformedURLException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 
+@ManagedObject
 public abstract class DataRepository<T extends AbstractEntity<ID>, ID> {
+    private DataSource dataSource;
+
     public abstract T getById(ID id);
     public abstract void save(T t) throws SQLException;
     public abstract List<T> getAll() throws SQLException, MalformedURLException;
+    public abstract void updateEntities(List<T> entities) throws SQLException;
 
-    protected Connection getConnection() {
-        Connection con = null;
-        String url = "jdbc:postgresql://localhost:5432/optcourses";
-        String user = "postgres";
-        String password = "root";
+    protected Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
 
-        try {
-            Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection completed.");
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-        }
-        return con;
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

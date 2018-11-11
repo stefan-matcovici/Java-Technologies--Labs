@@ -1,27 +1,36 @@
 package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
 
+import ro.uaic.info.javatechnologies.optcourses.beans.BackingBean;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Named("optionalPackagesAll")
 @RequestScoped
-public class OptionalPackagesBean implements Serializable {
+public class OptionalPackagesBean extends BackingBean<OptionalPackage, String> implements Serializable {
     private List<OptionalPackage> cache;
 
-    private final Logger log = Logger.getLogger(this.getClass().getName());
-
     public OptionalPackagesBean() throws SQLException {
-        OptionalPackageRepository optionalPackageRepository = new OptionalPackageRepository();
-        cache = new ArrayList<>(optionalPackageRepository.getAll());
+        repository = new OptionalPackageRepository();
+    }
+
+    @PostConstruct
+    public void init() {
+        super.init();
+        try {
+            cache = new ArrayList<>(repository.getAll());
+        } catch (SQLException | MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<OptionalPackage> getOptionalPackages() {

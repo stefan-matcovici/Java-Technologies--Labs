@@ -34,4 +34,9 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
     public List<OptionalCourse> getAll() throws SQLException {
         return null;
     }
+
+    @Override
+    public void updateEntities(List<OptionalCourse> entities) throws SQLException {
+
+    }
 }

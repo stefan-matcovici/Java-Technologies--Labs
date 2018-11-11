@@ -42,4 +42,9 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
 
         return packages;
     }
+
+    @Override
+    public void updateEntities(List<OptionalPackage> entities) throws SQLException {
+
+    }
 }

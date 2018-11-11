@@ -1,19 +1,22 @@
 package ro.uaic.info.javatechnologies.optcourses.beans;
 
 import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
-import ro.uaic.info.javatechnologies.optcourses.repository.DataRepository;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.sql.SQLException;
 
-public abstract class DataEdit<T extends AbstractEntity<ID>, ID> implements Serializable {
+public abstract class DataEdit<T extends AbstractEntity<ID>, ID> extends BackingBean<T, ID> implements Serializable {
     @Valid
     protected AbstractEntity<ID> entity;
 
-    protected DataRepository<T, ID> repository;
+    @PostConstruct
+    public void init() {
+        super.init();
+    }
 
     public AbstractEntity<ID> getEntity() {
         return entity;

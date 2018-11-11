@@ -9,23 +9,60 @@
             <f:facet name="header"> #{msgs['course.view.title']} </f:facet>
             <p:column headerText="#{msgs['course.name']}"
                       sortBy="#{entity.name}">
-                <h:outputText value="#{entity.name}"/>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{entity.name}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{entity.name}" style="width:96%" label="name"/>
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
             <p:column headerText="#{msgs['opt-package-form.year']}"
                       sortBy="#{entity.year}">
-                <h:outputText value="#{entity.year}"/>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{entity.year}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{entity.year}" style="width:96%" label="year"/>
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
             <p:column headerText="#{msgs['opt-package-form.semester']}"
                       sortBy="#{entity.semester}">
-                <h:outputText value="#{entity.semester}"/>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{entity.semester}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <h:selectOneMenu value = "#{entity.semester}">
+                            <f:selectItems value="#{semesterBean.statuses}" />
+                        </h:selectOneMenu>
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
-            <p:column headerText="#{msgs['courses.url']}"
-                      sortBy="#{entity.url}">
-                <h:outputText value="#{entity.url}"/>
+            <p:column headerText="#{msgs['courses.url']}" sortBy="#{entity.url}">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{entity.url}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{entity.url}" style="width:96%" label="url"/>
+                    </f:facet>
+                </p:cellEditor>
             </p:column>
             <p:column headerText="#{msgs['courses.study-groups']}"
                       sortBy="#{entity.studyGroups}">
-                <h:outputText value="#{entity.studyGroups}"/>
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{entity.studyGroups}"/>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:inputText value="#{entity.studyGroups}" style="width:96%" label="url"/>
+                    </f:facet>
+                </p:cellEditor>
+
             </p:column>
         </ez:dataTable>
     </ui:define>

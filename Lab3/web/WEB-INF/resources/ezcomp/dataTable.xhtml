@@ -13,25 +13,34 @@
     <cc:attribute name="dataView" type="ro.uaic.info.javatechnologies.optcourses.beans.DataView"/>
 </cc:interface>
 <cc:implementation>
-    <p:dataTable id="dataTable"
-                 value="#{cc.attrs.dataView.entities}"
-                 var="entity"
-                 rowKey="#{entity.id}"
-                 selectionMode="single">
-        <p:column headerText="Id">
-            <h:outputText value="#{entity.id}" />
-        </p:column>
-        <!--<p:ajax event="rowDblselect"-->
-                <!--listener="#{cc.attrs.dataView.onRowDblClckSelect}" global="false"/>-->
-        <!--<p:ajax event="rowSelect" listener="#{cc.attrs.dataView.onRowSelect}"-->
-                <!--update="addBtn editBtn removeBtn emailBtn"/>-->
-        <cc:insertFacet name="header"/>
-        <cc:insertChildren/>
-        <f:facet id="footer" name="footer">
-            <p:commandButton id="addBtn" update="dataTable"
-                             action="#{cc.attrs.dataView.add}"/>
-        </f:facet>
-    </p:dataTable>
+    <h:form id="form">
+        <p:growl id="msgs" showDetail="true"/>
+        <p:dataTable id="dataTable"
+                     value="#{cc.attrs.dataView.entities}"
+                     var="entity"
+                     editable="true"
+                     editMode="cell"
+                     widgetVar="cellEntity"
+                     rowKey="#{entity.id}">
+            <p:ajax event="cellEdit" listener="#{cc.attrs.dataView.onCellEdit}" />
+
+            <p:column headerText="Id">
+                <h:outputText value="#{entity.id}" />
+            </p:column>
+            <cc:insertFacet name="header"/>
+            <cc:insertChildren/>
+            <f:facet name="footer">
+                <p:commandButton id="addBtn" update="dataTable" action="#{cc.attrs.dataView.save}" value="Save"/>
+            </f:facet>
+        </p:dataTable>
+
+        <p:contextMenu for="dataTable" rowIndexVar="row" widgetVar="cMenu">
+            <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('cellEntity').showCellEditor();return false;"/>
+            <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>
+        </p:contextMenu>
+
+
+    </h:form>
 </cc:implementation>
 </body>
 </html>
