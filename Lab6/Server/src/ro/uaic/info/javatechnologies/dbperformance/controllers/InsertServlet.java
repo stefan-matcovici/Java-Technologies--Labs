@@ -28,6 +28,7 @@ public class InsertServlet extends HttpServlet implements DBServlet {
         try {
             Connection connection = getConnection(getInitParameter("connection-type"));
             insert(connection, new Date(), req.getRemoteHost(), paramsToString(req.getParameterMap()));
+            connection.close();
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (SQLException | NamingException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

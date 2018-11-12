@@ -21,6 +21,7 @@ public class SelectServlet extends HttpServlet implements DBServlet {
         try {
             Connection connection = getConnection(getInitParameter("connection-type"));
             select(connection);
+            connection.close();
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (SQLException | NamingException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
