@@ -6,10 +6,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.Connection;
-
 import java.sql.SQLException;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
@@ -24,14 +24,29 @@ public class InsertServlet extends HttpServlet implements DBServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String initParameter = getInitParameter("connection-type");
+        HttpSession session = null;
+        if (initParameter.equals("connection-per-session")) {
+            session = req.getSession();
+        }
         try {
-            Connection connection = getConnection(getInitParameter("connection-type"));
+
+
+            Connection connection = getConnection(initParameter);
             insert(connection, new Date(), req.getRemoteHost(), paramsToString(req.getParameterMap()));
-            connection.close();
             resp.setStatus(HttpServletResponse.SC_OK);
+            if (initParameter.equals("connection-pool")) {
+                connection.close();
+            }
         } catch (SQLException | NamingException e) {
+            resp.getOutputStream().print(e.toString());
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        finally {
+            if (initParameter.equals("connection-per-session")) {
+                session.invalidate();
+            }
         }
 
     }

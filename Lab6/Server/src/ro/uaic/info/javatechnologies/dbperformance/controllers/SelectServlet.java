@@ -19,10 +19,14 @@ public class SelectServlet extends HttpServlet implements DBServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            Connection connection = getConnection(getInitParameter("connection-type"));
+            String initParameter = getInitParameter("connection-type");
+            Connection connection = getConnection(initParameter);
             select(connection);
-            connection.close();
             resp.setStatus(HttpServletResponse.SC_OK);
+
+            if (initParameter.equals("connection-pool")) {
+                connection.close();
+            }
         } catch (SQLException | NamingException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

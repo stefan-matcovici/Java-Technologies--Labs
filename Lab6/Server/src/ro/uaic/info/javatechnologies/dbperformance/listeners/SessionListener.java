@@ -4,6 +4,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 @WebListener()
 public class SessionListener implements HttpSessionListener, ConnectionFactory {
@@ -15,7 +16,11 @@ public class SessionListener implements HttpSessionListener, ConnectionFactory {
 
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Connection getConnection() {

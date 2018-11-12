@@ -8,19 +8,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         String endpoint = args[0];
 
-        ExecutorService executor = Executors.newFixedThreadPool(10);
-        List<Callable<Void>> tasks = new ArrayList<>();
-        for (int i = 0; i < 1_00; i++)
+        long seconds = 0;
+        ExecutorService executor = Executors.newFixedThreadPool(1000);
+        List<Callable<Double>> tasks = new ArrayList<>();
+        for (int i = 0; i < 100_000; i++)
             tasks.add(() -> {
                 try {
                     URL url = new URL("http://localhost:8080/lab6/" + endpoint);
@@ -46,7 +44,10 @@ public class Main {
                     }
 
                     System.out.println("sent");
+                    long startTime = System.nanoTime();
                     System.out.println(conn.getResponseCode());
+                    long endTime = System.nanoTime();
+                    return (double)(endTime - startTime) / 1_000_000_000.0;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -54,11 +55,19 @@ public class Main {
                 return null;
             });
 
-        executor.invokeAll(tasks, 30, TimeUnit.SECONDS);
+        List<Future<Double>> results = executor.invokeAll(tasks, 30, TimeUnit.SECONDS);
         executor.shutdown();
         while (!executor.isTerminated()) {
 
         }
         System.out.println("\nFinished all threads");
+        System.out.println(String.format("\n%f", results.stream().mapToDouble(longFuture -> {
+            try {
+                return longFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            return 0;
+        }).sum()));
     }
 }
