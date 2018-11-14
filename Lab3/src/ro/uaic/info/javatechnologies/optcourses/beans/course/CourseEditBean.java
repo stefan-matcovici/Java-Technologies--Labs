@@ -17,7 +17,7 @@ public class CourseEditBean extends DataEdit<Course, String> {
     public CourseEditBean() {
         super();
         entity = new Course();
-        repository = new CourseRepository();
+        repository = new CourseRepository(obtainTenant());
     }
 
     public String onFlowProcess(FlowEvent event) {

@@ -12,9 +12,13 @@ import java.util.List;
 
 public class CourseRepository extends DataRepository<Course, String> {
 
-    private static final String addCourseQuery = "INSERT INTO public.\"COURSES\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
-    private static final String getAllCoursesQuery = "SELECT * FROM public.\"COURSES\"";
-    private static final String updateEntityQuery = "UPDATE public.\"COURSES\" SET name=?, year=?, semester=?, url=?, study_groups=? WHERE id=?;";
+    private static final String addCourseQuery = "INSERT INTO %s.\"courses\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
+    private static final String getAllCoursesQuery = "SELECT * FROM %s.\"courses\"";
+    private static final String updateEntityQuery = "UPDATE %s.\"courses\" SET name=?, year=?, semester=?, url=?, study_groups=? WHERE id=?;";
+
+    public CourseRepository(String schema) {
+        super(schema);
+    }
 
     @Override
     public Course getById(String s) {
@@ -24,7 +28,7 @@ public class CourseRepository extends DataRepository<Course, String> {
     @Override
     public void save(Course course) throws SQLException {
         Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(addCourseQuery);
+        PreparedStatement pst = con.prepareStatement(String.format(addCourseQuery, getSchema()));
         pst.setString(1, course.getName());
         pst.setInt(2, course.getYear());
         pst.setString(3, course.getSemester().getName());
@@ -39,14 +43,14 @@ public class CourseRepository extends DataRepository<Course, String> {
     public List<Course> getAll() throws SQLException, MalformedURLException {
         Connection con = getConnection();
         Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(getAllCoursesQuery);
+        ResultSet rs = statement.executeQuery(String.format(getAllCoursesQuery, getSchema()));
         List<Course> courses = new ArrayList<>();
         while (rs.next()) {
             courses.add(new Course(rs.getString("id"),
                     rs.getString("name"),
                     rs.getInt("year"),
                     Semester.valueOf(rs.getString("semester").toUpperCase()),
-                    new URL(rs.getString("url")),
+                    rs.getString("url") != null ? new URL(rs.getString("url")): new URL(""),
                     new Lecturer(),
                     rs.getInt("study_groups")));
         }
@@ -57,7 +61,7 @@ public class CourseRepository extends DataRepository<Course, String> {
     @Override
     public void updateEntities(List<Course> entities) throws SQLException {
         Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(updateEntityQuery);
+        PreparedStatement pst = con.prepareStatement(String.format(updateEntityQuery, getSchema()));
         for (Course entity: entities) {
             pst.setString(1, entity.getName());
             pst.setInt(2, entity.getYear());

@@ -4,6 +4,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:param name="backingBean" value="#{courseViewBean}"/>
     <ui:define name="dataViewContent">
         <ez:dataTable dataView="#{courseViewBean}">
             <f:facet name="header"> #{msgs['course.view.title']} </f:facet>

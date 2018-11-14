@@ -23,7 +23,7 @@ public class LecturerBean extends BackingBean<Lecturer, Integer> implements Seri
     private final Logger log = Logger.getLogger(this.getClass().getName());
 
     public LecturerBean() throws SQLException {
-        repository = new LecturerRepository();
+        repository = new LecturerRepository(obtainTenant());
     }
 
     @PostConstruct

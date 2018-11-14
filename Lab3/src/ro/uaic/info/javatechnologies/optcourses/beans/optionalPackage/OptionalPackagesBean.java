@@ -20,7 +20,7 @@ public class OptionalPackagesBean extends BackingBean<OptionalPackage, String> i
     private List<OptionalPackage> cache;
 
     public OptionalPackagesBean() throws SQLException {
-        repository = new OptionalPackageRepository();
+        repository = new OptionalPackageRepository(obtainTenant());
     }
 
     @PostConstruct

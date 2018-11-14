@@ -9,7 +9,11 @@ import java.util.List;
 
 public class OptionalCourseRepository extends DataRepository<OptionalCourse, String> {
 
-    private static final String addCourseQuery = "INSERT INTO public.\"COURSES\" (name, year, semester, url, lecturer_id, study_groups, optional) VALUES (?, ?, ?, ?, ?, ?, TRUE); ";
+    private static final String addCourseQuery = "INSERT INTO %s.\"courses\" (name, year, semester, url, lecturer_id, study_groups, optional) VALUES (?, ?, ?, ?, ?, ?, TRUE); ";
+
+    public OptionalCourseRepository(String schema) {
+        super(schema);
+    }
 
     @Override
     public OptionalCourse getById(String s) {
@@ -19,7 +23,7 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
     @Override
     public void save(OptionalCourse optionalCourse) throws SQLException {
         Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(addCourseQuery);
+        PreparedStatement pst = con.prepareStatement(String.format(addCourseQuery, getSchema()));
         pst.setString(1, optionalCourse.getName());
         pst.setInt(2, optionalCourse.getYear());
         pst.setString(3, optionalCourse.getSemester().getName());

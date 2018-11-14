@@ -9,8 +9,12 @@ import java.util.List;
 
 public class OptionalPackageRepository extends DataRepository<OptionalPackage, String> {
 
-    private static final String addOptionalPacakgeQuery = "INSERT INTO public.\"OPTIONAL_PACKAGES\" (id, year, semester) VALUES (?, ?, ?); ";
-    private static final String getAllPackagesQUery = "SELECT * FROM public.\"OPTIONAL_PACKAGES\"";
+    private static final String addOptionalPacakgeQuery = "INSERT INTO %s.\"optional_packages\" (id, year, semester) VALUES (?, ?, ?); ";
+    private static final String getAllPackagesQUery = "SELECT * FROM %s.\"optional_packages\"";
+
+    public OptionalPackageRepository(String schema) {
+        super(schema);
+    }
 
     @Override
     public OptionalPackage getById(String s) {
@@ -20,7 +24,7 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
     @Override
     public void save(OptionalPackage optionalPackage) throws SQLException {
         Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(addOptionalPacakgeQuery);
+        PreparedStatement pst = con.prepareStatement(String.format(addOptionalPacakgeQuery, getSchema()));
         pst.setString(1, optionalPackage.getId());
         pst.setInt(2, optionalPackage.getYear());
         pst.setString(3, optionalPackage.getSemester().getName());
@@ -33,7 +37,7 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
     public List<OptionalPackage> getAll() throws SQLException {
         Connection con = getConnection();
         Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(getAllPackagesQUery);
+        ResultSet rs = statement.executeQuery(String.format(getAllPackagesQUery, getSchema()));
         List<OptionalPackage> packages = new ArrayList<>();
         while (rs.next()) {
             packages.add(new OptionalPackage(rs.getString("id"), rs.getInt("year"),

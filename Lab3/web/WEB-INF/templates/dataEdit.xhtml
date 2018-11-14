@@ -13,7 +13,7 @@
                 </ui:insert>
                 <p:focus id="formFocus" context="dataEditForm"/>
                 <h:panelGrid id="dataEditButtons" columns="2">
-                    <p:commandButton id="saveBtn" value="#{msgs['global.submit']}" action="#{dataEditBean.submit}" />
+                    <p:commandButton id="saveBtn" value="#{msgs['global.submit']}" action="#{backingBean.submit}" />
                     <h:button id="cancelBtn" value="#{msgs['global.cancel']}" outcome="index" immediate="true" />
                 </h:panelGrid>
             </h:form>

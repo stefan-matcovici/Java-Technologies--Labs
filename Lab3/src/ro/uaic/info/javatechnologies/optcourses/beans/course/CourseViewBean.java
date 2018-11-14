@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class CourseViewBean extends DataView<Course, String> {
     public CourseViewBean() {
         super();
-        repository = new CourseRepository();
+        repository = new CourseRepository(obtainTenant());
     }
 
     @PostConstruct

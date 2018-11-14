@@ -4,6 +4,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <ui:param name="backingBean" value="#{optPackagesView}"/>
     <ui:define name="dataViewContent">
         <p:tree value="#{optPackagesView.root}" var="node" dynamic="true">
             <p:treeNode>

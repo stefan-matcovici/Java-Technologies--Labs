@@ -25,7 +25,7 @@ public class OptionalPackagesView extends  BackingBean<OptionalPackage, String> 
 
     public OptionalPackagesView() {
         super();
-        repository = new OptionalPackageRepository();
+        repository = new OptionalPackageRepository(obtainTenant());
     }
 
     @PostConstruct

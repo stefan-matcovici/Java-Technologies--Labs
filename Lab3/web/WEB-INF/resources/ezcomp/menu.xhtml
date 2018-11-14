@@ -1,6 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://xmlns.jcp.org/jsf/composite">
 <h:head>
 </h:head>
@@ -16,28 +18,44 @@
         </style>
         <p:menubar>
             <p:submenu label="#{msgs['index.optional-packages']}" icon="fa fa-fw fa-dropbox">
-                <p:menuitem value="#{msgs['index.add']}" outcome="opt-packages-form" icon="fa fa-fw fa-plus"/>
+                <p:menuitem value="#{msgs['index.add']}" outcome="opt-packages-form" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
                 <p:separator/>
-                <p:menuitem value="#{msgs['index.view']}" outcome="opt-packages-view" icon="fa fa-fw fa-table"/>
+                <p:menuitem value="#{msgs['index.view']}" outcome="opt-packages-view" icon="fa fa-fw fa-table">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
             </p:submenu>
 
             <p:submenu label="#{msgs['index.lecturers']}" icon="fa fa-fw fa-pencil">
-                <p:menuitem value="#{msgs['index.add']}" outcome="lect-form" icon="fa fa-fw fa-plus"/>
+                <p:menuitem value="#{msgs['index.add']}" outcome="lect-form" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
                 <p:separator/>
-                <p:menuitem value="#{msgs['index.view']}" outcome="lecturer-view" icon="fa fa-fw fa-table"/>
+                <p:menuitem value="#{msgs['index.view']}" outcome="lecturer-view" icon="fa fa-fw fa-table">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
             </p:submenu>
 
             <p:submenu label="#{msgs['index.courses']}" icon="fa fa-fw fa-university">
                 <p:submenu label="#{msgs['index.compulsory']}" icon="fa fa-fw fa-circle">
-                    <p:menuitem value="#{msgs['index.add']}" outcome="course-form" icon="fa fa-fw fa-plus"/>
+                    <p:menuitem value="#{msgs['index.add']}" outcome="course-form" icon="fa fa-fw fa-plus">
+                        <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                    </p:menuitem>
                     <p:separator/>
-                    <p:menuitem value="#{msgs['index.view']}" outcome="course-view" icon="fa fa-fw fa-table"/>
+                    <p:menuitem value="#{msgs['index.view']}" outcome="course-view" icon="fa fa-fw fa-table">
+                        <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                    </p:menuitem>
                 </p:submenu>
                 <p:separator/>
                 <p:submenu label="#{msgs['index.optional']}" url="#" icon="fa fa-fw fa-star-half-empty">
-                    <p:menuitem value="#{msgs['index.add']}" outcome="opt-course-form" icon="fa fa-fw fa-plus"/>
+                    <p:menuitem value="#{msgs['index.add']}" outcome="opt-course-form" icon="fa fa-fw fa-plus">
+                        <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                    </p:menuitem>
                     <p:separator/>
-                    <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table"/>
+                    <p:menuitem value="#{msgs['index.view']}" url="#" icon="fa fa-fw fa-table">
+                        <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                    </p:menuitem>
                 </p:submenu>
             </p:submenu>
         </p:menubar>

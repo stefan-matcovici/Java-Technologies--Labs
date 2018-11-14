@@ -20,7 +20,7 @@ public class OptionalCourseEditBean extends DataEdit<OptionalCourse, String> {
     public OptionalCourseEditBean() {
         super();
         entity = new OptionalCourse();
-        repository = new OptionalCourseRepository();
+        repository = new OptionalCourseRepository(obtainTenant());
     }
 
     public String onFlowProcess(FlowEvent event) {
