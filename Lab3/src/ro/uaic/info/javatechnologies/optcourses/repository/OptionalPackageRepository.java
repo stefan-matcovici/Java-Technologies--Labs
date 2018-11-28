@@ -1,16 +1,19 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.entities.PackagesEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.Query;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OptionalPackageRepository extends DataRepository<OptionalPackage, String> {
 
-    private static final String addOptionalPacakgeQuery = "INSERT INTO %s.\"optional_packages\" (id, year, semester) VALUES (?, ?, ?); ";
-    private static final String getAllPackagesQUery = "SELECT * FROM %s.\"optional_packages\"";
+    public OptionalPackageRepository() {
+    }
 
     public OptionalPackageRepository(String schema) {
         super(schema);
@@ -23,32 +26,43 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
 
     @Override
     public void save(OptionalPackage optionalPackage) throws SQLException {
-        Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(String.format(addOptionalPacakgeQuery, getSchema()));
-        pst.setString(1, optionalPackage.getId());
-        pst.setInt(2, optionalPackage.getYear());
-        pst.setString(3, optionalPackage.getSemester().getName());
-
-        pst.executeUpdate();
+        optCoursesPU.getTransaction().begin();
+        optCoursesPU.persist(toOptionalPackageEntity(optionalPackage));
+        optCoursesPU.getTransaction().commit();
     }
-
 
     @Override
     public List<OptionalPackage> getAll() throws SQLException {
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(String.format(getAllPackagesQUery, getSchema()));
-        List<OptionalPackage> packages = new ArrayList<>();
-        while (rs.next()) {
-            packages.add(new OptionalPackage(rs.getString("id"), rs.getInt("year"),
-                    Semester.valueOf(rs.getString("semester").toUpperCase())));
-        }
+        Query query = optCoursesPU.createQuery("SELECT e FROM PackagesEntity e");
+        List<OptionalPackage> optionalPackages = ((Collection<PackagesEntity>) query.getResultList()).stream().map(OptionalPackageRepository::toOptionalPackage).collect(Collectors.toList());
 
-        return packages;
+        return optionalPackages;
     }
 
     @Override
     public void updateEntities(List<OptionalPackage> entities) throws SQLException {
 
+    }
+
+    static OptionalPackage toOptionalPackage(PackagesEntity entity) {
+        OptionalPackage result = new OptionalPackage();
+        result.setId(String.valueOf(entity.getId()));
+        result.setCode(entity.getCode());
+        result.setYear(entity.getYear());
+        result.setSemester(Semester.valueOf(entity.getSemester().toUpperCase()));
+        result.setCode(entity.getCode());
+
+        return result;
+    }
+
+    static PackagesEntity toOptionalPackageEntity(OptionalPackage optionalPackage) {
+        PackagesEntity result = new PackagesEntity();
+        result.setId(Integer.parseInt(optionalPackage.getId()));
+        result.setCode(optionalPackage.getCode());
+        result.setYear(optionalPackage.getYear());
+        result.setSemester(optionalPackage.getSemester().getName());
+        result.setCode(optionalPackage.getCode());
+
+        return result;
     }
 }

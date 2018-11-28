@@ -3,7 +3,6 @@ package ro.uaic.info.javatechnologies.optcourses.beans.optionalPackage;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import ro.uaic.info.javatechnologies.optcourses.beans.BackingBean;
-import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
@@ -25,7 +24,7 @@ public class OptionalPackagesView extends  BackingBean<OptionalPackage, String> 
 
     public OptionalPackagesView() {
         super();
-        repository = new OptionalPackageRepository(obtainTenant());
+        repository = new OptionalPackageRepository();
     }
 
     @PostConstruct
@@ -47,7 +46,7 @@ public class OptionalPackagesView extends  BackingBean<OptionalPackage, String> 
             for (Semester semester: semesters) {
                 TreeNode semesterNode = new DefaultTreeNode(semester.getName(), yearNode);
                 optionalPackages.stream().filter(optionalPackage -> optionalPackage.getYear().equals(year) && optionalPackage.getSemester().equals(semester))
-                        .map(AbstractEntity::getId)
+                        .map(OptionalPackage::getCode)
                         .forEach(courseId -> {
                             TreeNode courseNode = new DefaultTreeNode(courseId, semesterNode);
                         });

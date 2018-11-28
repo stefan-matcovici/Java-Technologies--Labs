@@ -17,15 +17,14 @@ public class CourseEditBean extends DataEdit<Course, String> {
     public CourseEditBean() {
         super();
         entity = new Course();
-        repository = new CourseRepository(obtainTenant());
+        repository = new CourseRepository();
     }
 
     public String onFlowProcess(FlowEvent event) {
-        if(skip) {
+        if (skip) {
             skip = false;
             return "confirm";
-        }
-        else {
+        } else {
             return event.getNewStep();
         }
     }

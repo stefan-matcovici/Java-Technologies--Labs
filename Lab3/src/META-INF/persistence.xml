@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="OptCoursesPU">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.StudentsEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.CoursePrefsEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.CoursesEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.OptionalCourseEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.MandatoryCourseEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.GradesEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.LecturersEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.LecturersCoursesEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.PackagesEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.PackagesCoursesEntity</class>
+        <class>ro.uaic.info.javatechnologies.optcourses.entities.StudentPrefsEntity</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/optcourses-jpa" />
+            <property name="javax.persistence.jdbc.user" value="postgres" />
+            <property name="javax.persistence.jdbc.password" value="root" />
+            <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/optcourses_jpa"/>
+            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>

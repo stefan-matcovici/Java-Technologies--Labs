@@ -1,20 +1,29 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.entities.MandatoryCourseEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.Course;
-import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 
+import javax.persistence.Query;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.*;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository.toLecturer;
+import static ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository.toLecturerEntity;
 
 public class CourseRepository extends DataRepository<Course, String> {
 
     private static final String addCourseQuery = "INSERT INTO %s.\"courses\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
     private static final String getAllCoursesQuery = "SELECT * FROM %s.\"courses\"";
     private static final String updateEntityQuery = "UPDATE %s.\"courses\" SET name=?, year=?, semester=?, url=?, study_groups=? WHERE id=?;";
+
+    public CourseRepository() {
+
+    }
 
     public CourseRepository(String schema) {
         super(schema);
@@ -27,51 +36,55 @@ public class CourseRepository extends DataRepository<Course, String> {
 
     @Override
     public void save(Course course) throws SQLException {
-        Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(String.format(addCourseQuery, getSchema()));
-        pst.setString(1, course.getName());
-        pst.setInt(2, course.getYear());
-        pst.setString(3, course.getSemester().getName());
-        pst.setString(4, course.getUrl() != null ? course.getUrl().toString(): null);
-        pst.setInt(5, course.getLecturer() != null ? course.getLecturer().getId(): 0);
-        pst.setInt(6, course.getStudyGroups());
-
-        pst.executeUpdate();
+        optCoursesPU.getTransaction().begin();
+        optCoursesPU.persist(toEntity(course));
+        optCoursesPU.getTransaction().commit();
     }
 
     @Override
     public List<Course> getAll() throws SQLException, MalformedURLException {
-        Connection con = getConnection();
-        Statement statement = con.createStatement();
-        ResultSet rs = statement.executeQuery(String.format(getAllCoursesQuery, getSchema()));
-        List<Course> courses = new ArrayList<>();
-        while (rs.next()) {
-            courses.add(new Course(rs.getString("id"),
-                    rs.getString("name"),
-                    rs.getInt("year"),
-                    Semester.valueOf(rs.getString("semester").toUpperCase()),
-                    rs.getString("url") != null ? new URL(rs.getString("url")): new URL(""),
-                    new Lecturer(),
-                    rs.getInt("study_groups")));
-        }
+        Query query = optCoursesPU.createQuery("SELECT e FROM MandatoryCourseEntity e");
+        List<Course> courses = ((Collection<MandatoryCourseEntity>) query.getResultList()).stream().map(this::toMandatoryCourse).collect(Collectors.toList());
 
         return courses;
     }
 
+    private Course toMandatoryCourse(MandatoryCourseEntity coursesEntity) {
+        Course result = new Course();
+
+        result.setName(coursesEntity.getName());
+        result.setSemester(Semester.valueOf(coursesEntity.getSemester()));
+        result.setStudyGroups(coursesEntity.getStudyGroups());
+        try {
+            result.setUrl(new URL(coursesEntity.getUrl()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        result.setYear(coursesEntity.getYear());
+        result.setLecturer(toLecturer(coursesEntity.getLecturer()));
+
+        return result;
+    }
+
+    private MandatoryCourseEntity toEntity(Course course) {
+        MandatoryCourseEntity result = new MandatoryCourseEntity();
+
+        result.setName(course.getName());
+        result.setSemester(course.getSemester().getName());
+        result.setStudyGroups(course.getStudyGroups());
+        if (course.getUrl() != null)
+            result.setUrl(course.getUrl().toString());
+        result.setYear(course.getYear());
+        result.setLecturer(toLecturerEntity(course.getLecturer()));
+
+        return result;
+    }
+
     @Override
     public void updateEntities(List<Course> entities) throws SQLException {
-        Connection con = getConnection();
-        PreparedStatement pst = con.prepareStatement(String.format(updateEntityQuery, getSchema()));
-        for (Course entity: entities) {
-            pst.setString(1, entity.getName());
-            pst.setInt(2, entity.getYear());
-            pst.setString(3, entity.getSemester().getName());
-            pst.setString(4, entity.getUrl() != null ? entity.getUrl().toString(): null);
-            // pst.setInt(5, entity.getLecturer() != null ? entity.getLecturer().getId(): 0);
-            pst.setInt(5, entity.getStudyGroups());
-            pst.setString(6, entity.getId());
-
-            pst.executeUpdate();
+        for (Course entity : entities) {
+            save(entity);
         }
     }
 }

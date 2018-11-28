@@ -1,6 +1,7 @@
 package ro.uaic.info.javatechnologies.optcourses.models;
 
 import java.net.URL;
+import java.util.Objects;
 
 public class OptionalCourse extends Course {
 
@@ -26,5 +27,18 @@ public class OptionalCourse extends Course {
 
     public void setOptionalPackage(OptionalPackage optionalPackage) {
         this.optionalPackage = optionalPackage;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OptionalCourse that = (OptionalCourse) o;
+        return Objects.equals(optionalPackage, that.optionalPackage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(optionalPackage);
     }
 }

@@ -16,7 +16,7 @@
     </style>
     <h:panelGrid columns="2" columnClasses="label, value">
         <h:outputText value="#{msgs['opt-package-form.code']}: *" />
-        <p:inputText value="#{optionalPackageBean.entity.id}" label="Code">
+        <p:inputText value="#{optionalPackageBean.entity.code}" label="Code">
             <f:validateBean disabled="false"/>
         </p:inputText>
     </h:panelGrid>
@@ -32,6 +32,24 @@
             <f:selectItems value="#{semesterBean.statuses}" />
         </h:selectOneMenu>
     </h:panelGrid>
+
+    <h:panelGrid id="prefs" columns="2">
+        <h:outputLabel value="CoursesPref" /> <br/>
+        <ui:repeat value="#{optionalPackageBean.coursePrefs}" var="pref" varStatus="status">
+            <h:outputText value="#{pref.course} - #{pref.preferencePercent}" /> <br/>
+        </ui:repeat>
+    </h:panelGrid>
+
+    <h:panelGrid id="prefsAdd" columns="4" rendered="#{optionalPackageBean.courseNotDone}">
+        <h:outputLabel value="Pref" />
+        <h:inputText value="#{optionalPackageBean.newPref}" />
+        <p:inputText id="decimal" value="#{optionalPackageBean.newPercent}" />
+        <p:slider style="width: 100px;" for="decimal" minValue="0.1" maxValue="#{optionalPackageBean.remainingPercent}" step="0.1" />
+    </h:panelGrid>
+
+    <p:commandLink actionListener="#{optionalPackageBean.addPref}" update="prefs prefsAdd" >
+        <h:outputText value="Add Author" />
+    </p:commandLink>
 
 </ui:define>
 </ui:composition>

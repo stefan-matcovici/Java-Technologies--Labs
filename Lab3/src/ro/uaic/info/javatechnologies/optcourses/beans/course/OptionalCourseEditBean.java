@@ -2,12 +2,9 @@ package ro.uaic.info.javatechnologies.optcourses.beans.course;
 
 import org.primefaces.event.FlowEvent;
 import ro.uaic.info.javatechnologies.optcourses.beans.DataEdit;
-import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalCourse;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalCourseRepository;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -16,11 +13,10 @@ import javax.inject.Named;
 public class OptionalCourseEditBean extends DataEdit<OptionalCourse, String> {
     private boolean skip;
 
-
     public OptionalCourseEditBean() {
         super();
         entity = new OptionalCourse();
-        repository = new OptionalCourseRepository(obtainTenant());
+        repository = new OptionalCourseRepository();
     }
 
     public String onFlowProcess(FlowEvent event) {
@@ -30,11 +26,6 @@ public class OptionalCourseEditBean extends DataEdit<OptionalCourse, String> {
         } else {
             return event.getNewStep();
         }
-    }
-
-    public void save() {
-        FacesMessage msg = new FacesMessage("Successful", "Welcome :" + ((Course) entity).getName());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public boolean isSkip() {

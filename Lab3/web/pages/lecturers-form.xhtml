@@ -18,6 +18,18 @@
                 <f:validateBean disabled="false"/>
             </p:inputText>
         </h:panelGrid>
+        <h:panelGrid columns="2" columnClasses="label, value">
+            <h:outputText value="Email: *"/>
+            <p:inputText value="#{lecturerBean.entity.email}" label="Mail">
+                <f:validateBean disabled="false"/>
+            </p:inputText>
+        </h:panelGrid>
+        <h:panelGrid columns="2" columnClasses="label, value">
+            <h:outputText value="#{msgs['courses.url']}: *"/>
+            <p:inputText value="#{lecturerBean.entity.url}" label="Url">
+                <f:validateBean disabled="false"/>
+            </p:inputText>
+        </h:panelGrid>
 
     </ui:define>
 </ui:composition>
