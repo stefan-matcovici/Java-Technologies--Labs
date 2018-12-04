@@ -39,6 +39,14 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
         return optionalPackages;
     }
 
+    public List<OptionalPackage> getByYear(int year) throws SQLException {
+        Query query = optCoursesPU.createQuery("SELECT e FROM PackagesEntity e where e.year="+ year);
+        List<OptionalPackage> optionalPackages = ((Collection<PackagesEntity>) query.getResultList()).stream().map(OptionalPackageRepository::toOptionalPackage).collect(Collectors.toList());
+
+        return optionalPackages;
+    }
+
+
     @Override
     public void updateEntities(List<OptionalPackage> entities) throws SQLException {
 
@@ -51,13 +59,15 @@ public class OptionalPackageRepository extends DataRepository<OptionalPackage, S
         result.setYear(entity.getYear());
         result.setSemester(Semester.valueOf(entity.getSemester().toUpperCase()));
         result.setCode(entity.getCode());
+        result.setCourses(entity.getOptionalCourseEntities().stream().map(CourseRepository::toMandatoryCourse).collect(Collectors.toList()));
 
         return result;
     }
 
     static PackagesEntity toOptionalPackageEntity(OptionalPackage optionalPackage) {
         PackagesEntity result = new PackagesEntity();
-        result.setId(Integer.parseInt(optionalPackage.getId()));
+        if (optionalPackage.getId() != null)
+            result.setId(Integer.parseInt(optionalPackage.getId()));
         result.setCode(optionalPackage.getCode());
         result.setYear(optionalPackage.getYear());
         result.setSemester(optionalPackage.getSemester().getName());

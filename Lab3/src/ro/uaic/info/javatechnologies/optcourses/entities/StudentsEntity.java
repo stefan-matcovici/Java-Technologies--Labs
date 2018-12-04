@@ -2,6 +2,7 @@ package ro.uaic.info.javatechnologies.optcourses.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "students", schema = "public", catalog = "optcourses_jpa")
@@ -10,6 +11,8 @@ public class StudentsEntity implements Serializable {
     private String lastName;
     private String firstName;
     private String email;
+    private Integer year;
+    private List<StudentPrefsEntity> studentPrefsEntityList;
 
     @Id
     @Column(name = "id", nullable = false, length = 20)
@@ -52,6 +55,10 @@ public class StudentsEntity implements Serializable {
         this.email = email;
     }
 
+    public void setStudentPrefsEntityList(List<StudentPrefsEntity> studentPrefsEntityList) {
+        this.studentPrefsEntityList = studentPrefsEntityList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,5 +81,15 @@ public class StudentsEntity implements Serializable {
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "year", nullable = true)
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 }

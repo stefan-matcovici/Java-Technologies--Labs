@@ -1,0 +1,64 @@
+<ui:composition template="/WEB-INF/templates/dataEdit.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:param name="backingBean" value="#{studentPreferencesEditBean}"/>
+    <ui:param name="title" value="Home"/>
+    <ui:param name="headerTitle" value="#{msgs['opt-package-form.package-detail']}"/>
+    <ui:define name="dataEditContent">
+        <style>
+            .label {
+                text-transform: capitalize;
+            }
+
+            .ui-panel-title {
+                text-transform: capitalize;
+            }
+        </style>
+
+        <h:panelGrid>
+            <h:selectOneMenu value="#{studentPreferencesEditBean.entity.student}" hideNoSelectionOption="true">
+                <p:ajax listener="#{studentPreferencesEditBean.getOnStudentChange}" update="packages"/>
+                <f:selectItem itemValue="#{null}" itemLabel="--select student--" noSelectionOption="true"/>
+                <f:selectItems value="#{studentsAll.students}" var="student"
+                               itemValue="#{student}"
+                               itemLabel="#{student.firstName}  #{student.lastName}"/>
+            </h:selectOneMenu>
+        </h:panelGrid>
+
+        <h:panelGrid id="packages">
+            <h:selectOneMenu value="#{studentPreferencesEditBean.optionalPackage}" hideNoSelectionOption="true">
+                <f:selectItem itemValue="#{null}" itemLabel="--select package--" noSelectionOption="true"/>
+                <p:ajax listener="#{studentPreferencesEditBean.getGetOnPackageChange}" update="courses, courses-pos"/>
+                <f:selectItems value="#{studentPreferencesEditBean.packageList}" var="package"
+                               itemValue="#{package}"
+                               itemLabel="#{package.code}"/>
+            </h:selectOneMenu>
+
+        </h:panelGrid>
+
+        <h:panelGroup id="courses">
+            <h:selectOneMenu value="#{studentPreferencesEditBean.entity.course}" hideNoSelectionOption="true">
+                <p:ajax listener="#{studentPreferencesEditBean.onPosChange}" />
+
+                <f:selectItem itemValue="#{null}" itemLabel="--select course--" noSelectionOption="true" />
+                <f:selectItems value="#{studentPreferencesEditBean.courseList}" var="course"
+                               itemValue="#{course}"
+                               itemLabel="#{course.name}"/>
+            </h:selectOneMenu>
+
+        </h:panelGroup>
+
+        <h:panelGroup id="courses-pos">
+            <h:selectOneMenu value="#{studentPreferencesEditBean.entity.pos}" hideNoSelectionOption="true">
+                <p:ajax listener="#{studentPreferencesEditBean.onPosChange}" />
+                <f:selectItem itemValue="#{null}" itemLabel="--select pos--" noSelectionOption="true" />
+                <f:selectItems value="#{studentPreferencesEditBean.posList}" var="pos"
+                               itemValue="#{pos}"
+                               itemLabel="#{pos}"/>
+            </h:selectOneMenu>
+
+        </h:panelGroup>
+
+    </ui:define>
+</ui:composition>

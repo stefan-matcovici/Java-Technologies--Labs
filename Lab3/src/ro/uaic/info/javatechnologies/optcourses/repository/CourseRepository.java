@@ -1,5 +1,6 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.entities.CoursesEntity;
 import ro.uaic.info.javatechnologies.optcourses.entities.MandatoryCourseEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
@@ -37,23 +38,24 @@ public class CourseRepository extends DataRepository<Course, String> {
     @Override
     public void save(Course course) throws SQLException {
         optCoursesPU.getTransaction().begin();
-        optCoursesPU.persist(toEntity(course));
+        optCoursesPU.persist(toMandatoryCourseEntity(course));
         optCoursesPU.getTransaction().commit();
     }
 
     @Override
     public List<Course> getAll() throws SQLException, MalformedURLException {
         Query query = optCoursesPU.createQuery("SELECT e FROM MandatoryCourseEntity e");
-        List<Course> courses = ((Collection<MandatoryCourseEntity>) query.getResultList()).stream().map(this::toMandatoryCourse).collect(Collectors.toList());
+        List<Course> courses = ((Collection<MandatoryCourseEntity>) query.getResultList()).stream().map(CourseRepository::toMandatoryCourse).collect(Collectors.toList());
 
         return courses;
     }
 
-    private Course toMandatoryCourse(MandatoryCourseEntity coursesEntity) {
+    static Course toMandatoryCourse(CoursesEntity coursesEntity) {
         Course result = new Course();
 
+        result.setId(String.valueOf(coursesEntity.getId()));
         result.setName(coursesEntity.getName());
-        result.setSemester(Semester.valueOf(coursesEntity.getSemester()));
+        result.setSemester(Semester.valueOf(coursesEntity.getSemester().toUpperCase()));
         result.setStudyGroups(coursesEntity.getStudyGroups());
         try {
             result.setUrl(new URL(coursesEntity.getUrl()));
@@ -67,11 +69,12 @@ public class CourseRepository extends DataRepository<Course, String> {
         return result;
     }
 
-    private MandatoryCourseEntity toEntity(Course course) {
+    static MandatoryCourseEntity toMandatoryCourseEntity(Course course) {
         MandatoryCourseEntity result = new MandatoryCourseEntity();
 
+        result.setId(Integer.parseInt(course.getId()));
         result.setName(course.getName());
-        result.setSemester(course.getSemester().getName());
+        result.setSemester(course.getSemester().getName().toUpperCase());
         result.setStudyGroups(course.getStudyGroups());
         if (course.getUrl() != null)
             result.setUrl(course.getUrl().toString());

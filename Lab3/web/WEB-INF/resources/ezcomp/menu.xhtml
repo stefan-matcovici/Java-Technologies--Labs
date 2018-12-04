@@ -58,6 +58,20 @@
                     </p:menuitem>
                 </p:submenu>
             </p:submenu>
+
+            <p:submenu label="#{msgs['students']}" icon="fa fa-fw fa-university">
+                <p:menuitem value="#{msgs['index.add']}" outcome="stud-form" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
+                <p:separator/>
+                <p:menuitem value="#{msgs['choose-optional']}" outcome="opt-chose" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
+                <p:separator/>
+                <p:menuitem value="#{msgs['stats']}" outcome="stats" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
+            </p:submenu>
         </p:menubar>
     </composite:implementation>
 

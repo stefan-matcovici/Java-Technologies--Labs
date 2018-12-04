@@ -3,7 +3,9 @@ package ro.uaic.info.javatechnologies.optcourses.models;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OptionalPackage extends AbstractEntity<String> {
 
@@ -14,6 +16,8 @@ public class OptionalPackage extends AbstractEntity<String> {
     private Semester semester;
 
     private String code;
+
+    private List<Course> courses;
 
     public OptionalPackage() {
 
@@ -50,6 +54,14 @@ public class OptionalPackage extends AbstractEntity<String> {
         this.code = code;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +79,6 @@ public class OptionalPackage extends AbstractEntity<String> {
 
     @Override
     public String toString() {
-        return getId() + "," + getCode() + "," + getYear() + "," + getSemester().getName();
+        return getId() + "," + getCode() + "," + getYear() + "," + getSemester().getName() + (courses != null? "," + courses.stream().map(Course::getId).collect(Collectors.joining(",")):"");
     }
 }

@@ -8,6 +8,7 @@ public class OptionalCourse extends Course {
     private OptionalPackage optionalPackage;
 
     public OptionalCourse() {
+        super();
         optionalPackage = new OptionalPackage();
     }
 

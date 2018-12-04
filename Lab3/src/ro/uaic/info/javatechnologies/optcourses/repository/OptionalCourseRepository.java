@@ -1,9 +1,12 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.entities.CoursesEntity;
 import ro.uaic.info.javatechnologies.optcourses.entities.OptionalCourseEntity;
+import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalCourse;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 
+import javax.persistence.Query;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -11,6 +14,8 @@ import java.util.List;
 
 import static ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository.toLecturer;
 import static ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository.toLecturerEntity;
+import static ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository.toOptionalPackage;
+import static ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository.toOptionalPackageEntity;
 
 public class OptionalCourseRepository extends DataRepository<OptionalCourse, String> {
 
@@ -31,7 +36,7 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
     @Override
     public void save(OptionalCourse optionalCourse) throws SQLException {
         optCoursesPU.getTransaction().begin();
-        optCoursesPU.persist(toEntity(optionalCourse));
+        optCoursesPU.persist(toOptionalCourseEntity(optionalCourse));
         optCoursesPU.getTransaction().commit();
     }
 
@@ -40,13 +45,19 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
         return null;
     }
 
-    private OptionalCourse toModel(OptionalCourseEntity coursesEntity) {
+    public Course getCourseById(String id) {
+        Query query = optCoursesPU.createQuery("SELECT e FROM CoursesEntity e where e.id = "+id);
+
+        return CourseRepository.toMandatoryCourse((CoursesEntity)query.getResultList().get(0));
+    }
+
+    static OptionalCourse toOptionalCourse(OptionalCourseEntity coursesEntity) {
         OptionalCourse result = new OptionalCourse();
 
         result.setName(coursesEntity.getName());
         result.setSemester(Semester.valueOf(coursesEntity.getSemester()));
         result.setStudyGroups(coursesEntity.getStudyGroups());
-        // result.setOptionalPackage(toOptionalPackage(coursesEntity.getPackageEntity()));
+        result.setOptionalPackage(toOptionalPackage(coursesEntity.getPackageEntity()));
 
         try {
             result.setUrl(new URL(coursesEntity.getUrl()));
@@ -60,7 +71,7 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
         return result;
     }
 
-    private OptionalCourseEntity toEntity(OptionalCourse course) {
+    static OptionalCourseEntity toOptionalCourseEntity(OptionalCourse course) {
         OptionalCourseEntity result = new OptionalCourseEntity();
 
         result.setName(course.getName());
@@ -70,7 +81,7 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
             result.setUrl(course.getUrl().toString());
         result.setYear(course.getYear());
         result.setLecturer(toLecturerEntity(course.getLecturer()));
-        // result.setPackageEntity(toOptionalPackageEntity(course.getOptionalPackage()));
+        result.setPackageEntity(toOptionalPackageEntity(course.getOptionalPackage()));
 
         return result;
     }

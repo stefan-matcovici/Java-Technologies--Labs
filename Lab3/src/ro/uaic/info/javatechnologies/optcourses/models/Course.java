@@ -4,6 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.net.URL;
+import java.util.Objects;
 
 public class Course extends AbstractEntity<String> {
 
@@ -21,6 +22,10 @@ public class Course extends AbstractEntity<String> {
 
     public Course() {
         lecturer = new Lecturer();
+    }
+
+    public Course(String id) {
+        setId(id);
     }
 
     public Course(String id, String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups) {
@@ -88,5 +93,28 @@ public class Course extends AbstractEntity<String> {
 
     public void setStudyGroups(int studyGroups) {
         this.studyGroups = studyGroups;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return year == course.year &&
+                studyGroups == course.studyGroups &&
+                Objects.equals(name, course.name) &&
+                semester == course.semester &&
+                Objects.equals(url, course.url) &&
+                Objects.equals(lecturer, course.lecturer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, year, semester, url, lecturer, studyGroups);
+    }
+
+    @Override
+    public String toString() {
+        return getId() + "," + name + "," + year + "," + (semester!=null ? semester.getName() + "," :"") + (url != null ?url.toString() +",":"") + studyGroups +"," + lecturer;
     }
 }
