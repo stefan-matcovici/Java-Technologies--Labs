@@ -43,7 +43,9 @@ public class LecturerRepository extends DataRepository<Lecturer, Integer> {
     static LecturersEntity toLecturerEntity(Lecturer lecturer) {
         LecturersEntity result = new LecturersEntity();
 
-        result.setId(lecturer.getId());
+        if (lecturer.getId() != null) {
+            result.setId(lecturer.getId());
+        }
         result.setFirstName(lecturer.getFirstName());
         result.setLastName(lecturer.getLastName());
         result.setEmail(lecturer.getEmail());
