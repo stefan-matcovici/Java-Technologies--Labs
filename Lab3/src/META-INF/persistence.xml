@@ -23,6 +23,7 @@
             <property name="javax.persistence.jdbc.password" value="root" />
             <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/optcourses_jpa"/>
             <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="eclipselink.deploy-on-startup" value="true" />
         </properties>
 
     </persistence-unit>

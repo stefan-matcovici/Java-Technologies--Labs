@@ -100,6 +100,13 @@
             <to-view-id>/pages/stats.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>search-courses</from-outcome>
+            <to-view-id>/pages/search-courses.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 
 
 

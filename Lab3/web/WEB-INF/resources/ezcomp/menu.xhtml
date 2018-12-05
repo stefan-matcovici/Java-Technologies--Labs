@@ -57,6 +57,10 @@
                         <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
                     </p:menuitem>
                 </p:submenu>
+                <p:separator/>
+                <p:menuitem value="#{msgs['courses.search']}" outcome="search-courses" icon="fa fa-fw fa-search">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
             </p:submenu>
 
             <p:submenu label="#{msgs['students']}" icon="fa fa-fw fa-university">

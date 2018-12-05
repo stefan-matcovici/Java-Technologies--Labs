@@ -1,0 +1,50 @@
+<ui:composition template="/WEB-INF/templates/page.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <p:panel header="Search params">
+            <h:form id="dataEditForm">
+                <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                <p:growl id="growl" sticky="true" showDetail="true"/>
+                <h:panelGrid columns="2" columnClasses="label, value">
+                    <h:outputText value="#{msgs['course.name']}: *"/>
+                    <p:inputText value="#{searchBean.name}" label="Name">
+                        <f:validateBean disabled="false"/>
+                        <p:ajax update="courses"/>
+                    </p:inputText>
+                </h:panelGrid>
+                <h:panelGrid columns="2" columnClasses="label, value">
+                    <h:outputText value="Optional:"/>
+                    <p:selectBooleanCheckbox value="#{searchBean.optional}" label="Optional">
+                        <p:ajax update="courses"/>
+                    </p:selectBooleanCheckbox>
+                </h:panelGrid>
+                <h:panelGrid columns="2" columnClasses="label, value, value2">
+                    <h:outputText value="StudyGroups: *"/>
+                    <p:inputText value="#{searchBean.studyGroups}" label="StudyGroups">
+                        <f:validateBean disabled="false"/>
+                        <p:ajax update="courses"/>
+                    </p:inputText>
+                </h:panelGrid>
+                <p:focus id="formFocus" context="dataEditForm"/>
+            </h:form>
+        </p:panel>
+
+        <p:dataTable id="courses" var="course" value="#{searchBean.filteredCourses}">
+            <f:facet name="header">
+                Students with uncompleted preferences
+            </f:facet>
+
+            <p:column headerText="Name">
+                <h:outputText value="#{course.name}" />
+            </p:column>
+
+            <p:column headerText="Study groups">
+                <h:outputText value="#{course.studyGroups}" />
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+</ui:composition>

@@ -2,10 +2,16 @@ package ro.uaic.info.javatechnologies.optcourses.repository;
 
 import ro.uaic.info.javatechnologies.optcourses.entities.CoursesEntity;
 import ro.uaic.info.javatechnologies.optcourses.entities.MandatoryCourseEntity;
+import ro.uaic.info.javatechnologies.optcourses.entities.OptionalCourseEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.models.Semester;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -18,12 +24,11 @@ import static ro.uaic.info.javatechnologies.optcourses.repository.LecturerReposi
 
 public class CourseRepository extends DataRepository<Course, String> {
 
-    private static final String addCourseQuery = "INSERT INTO %s.\"courses\" (name, year, semester, url, lecturer_id, study_groups) VALUES (?, ?, ?, ?, ?, ?); ";
-    private static final String getAllCoursesQuery = "SELECT * FROM %s.\"courses\"";
-    private static final String updateEntityQuery = "UPDATE %s.\"courses\" SET name=?, year=?, semester=?, url=?, study_groups=? WHERE id=?;";
+    CriteriaBuilder builder;
 
     public CourseRepository() {
-
+        super();
+        builder = optCoursesPU.getCriteriaBuilder();
     }
 
     public CourseRepository(String schema) {
@@ -49,6 +54,38 @@ public class CourseRepository extends DataRepository<Course, String> {
 
         return courses;
     }
+
+    public List<Course> getFilteredCourses(String name, Boolean optional, String studyGroups) {
+        CriteriaQuery<CoursesEntity> query = builder.createQuery(CoursesEntity.class);
+        Root root;
+        if (optional != null) {
+            if (optional.equals(Boolean.TRUE)) {
+                root = query.from(OptionalCourseEntity.class);
+            } else {
+                root = query.from(MandatoryCourseEntity.class);
+            }
+        } else {
+            root = query.from(CoursesEntity.class);
+        }
+
+        Predicate nameFiltering = builder.like(
+                root.<String>get("name"),
+                builder.parameter(String.class, "containsCondition"));
+        if (!studyGroups.isEmpty()) {
+
+            Predicate studyGroupsFiltering = builder.lessThanOrEqualTo(root.get("studyGroups"), studyGroups);
+            query.where(nameFiltering, studyGroupsFiltering);
+        } else {
+            query.where(nameFiltering);
+        }
+
+
+        TypedQuery<CoursesEntity> tq = optCoursesPU.createQuery(query);
+        tq.setParameter("containsCondition", "%" + name + "%");
+        List<Course> courses = tq.getResultList().stream().map(CourseRepository::toMandatoryCourse).collect(Collectors.toList());
+        return courses;
+    }
+
 
     static Course toMandatoryCourse(CoursesEntity coursesEntity) {
         Course result = new Course();
