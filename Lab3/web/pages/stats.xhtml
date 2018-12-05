@@ -1,12 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-    <title>Title</title>
-</head>
-<body>
+<ui:composition template="/WEB-INF/templates/page.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
 
-</body>
-</html>
+        <p:dataTable var="student" value="#{statsBean.incompleteStudents}">
+            <f:facet name="header">
+                Students with uncompleted preferences
+            </f:facet>
+
+            <p:column headerText="First name">
+                <h:outputText value="#{student.firstName}" />
+            </p:column>
+
+            <p:column headerText="Last name">
+                <h:outputText value="#{student.lastName}" />
+            </p:column>
+
+            <p:column headerText="Year">
+                <h:outputText value="#{student.year}" />
+            </p:column>
+
+            <p:column headerText="Email">
+                <h:outputText value="#{student.email}" />
+            </p:column>
+        </p:dataTable>
+
+        <p:dataTable var="coursePreference" value="#{statsBean.coursePreferenceAmongStudents}">
+            <f:facet name="header">
+                Courses preferences among students
+            </f:facet>
+
+            <p:column headerText="Course">
+                <h:outputText value="#{coursePreference.course.name}" />
+            </p:column>
+
+            <p:column headerText="Preference">
+                <h:outputText value="#{coursePreference.preference}" />
+            </p:column>
+        </p:dataTable>
+
+
+    </ui:define>
+</ui:composition>

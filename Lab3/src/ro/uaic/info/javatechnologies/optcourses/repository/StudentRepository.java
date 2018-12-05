@@ -39,6 +39,16 @@ public class StudentRepository extends DataRepository<Student, Integer> {
         return students;
     }
 
+    public List<Student> getStudentsWithIncompletePreferencesList() {
+        Query query = optCoursesPU.createQuery("SELECT student FROM StudentsEntity student, PackagesEntity package where " +
+                "package.year = student.year and " +
+                "(select count(courses.id) from OptionalCourseEntity courses where courses.packageEntity = package) != (select count(prefs.id) from StudentPrefsEntity prefs where prefs.studentsByStudentId = student)" +
+                "group by student");
+        List<Student> students = ((Collection<StudentsEntity>) query.getResultList()).stream().map(StudentRepository::toStudent).collect(Collectors.toList());
+
+        return students;
+    }
+
     static StudentsEntity toStudentEntity(Student student) {
         StudentsEntity result = new StudentsEntity();
 
