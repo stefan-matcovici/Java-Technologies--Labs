@@ -5,39 +5,27 @@ import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Named("optionalPackagesAll")
 @ApplicationScoped
 public class OptionalPackagesBean extends BackingBean<OptionalPackage, String> implements Serializable {
-    private List<OptionalPackage> cache;
 
-    public OptionalPackagesBean() throws SQLException {
-        repository = new OptionalPackageRepository();
-    }
+    @EJB
+    private OptionalPackageRepository optionalPackageRepository;
 
     @PostConstruct
     public void init() {
-        super.init();
-        try {
-            cache = new ArrayList<>(repository.getAll());
-        } catch (SQLException | MalformedURLException e) {
-            e.printStackTrace();
-        }
+        repository = optionalPackageRepository;
     }
 
-    public List<OptionalPackage> getOptionalPackages() {
-        return cache;
-    }
-
-    public void addLecturer(@Observes OptionalPackage optionalPackage) {
-        cache.add(optionalPackage);
+    public List<OptionalPackage> getOptionalPackages() throws MalformedURLException, SQLException {
+        return repository.getAll();
     }
 }

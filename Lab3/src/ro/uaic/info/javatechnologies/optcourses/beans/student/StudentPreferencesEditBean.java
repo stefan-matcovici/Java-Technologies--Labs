@@ -9,6 +9,8 @@ import ro.uaic.info.javatechnologies.optcourses.repository.OptionalCourseReposit
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 import ro.uaic.info.javatechnologies.optcourses.repository.StudentsPrefRepository;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -21,8 +23,6 @@ import java.util.stream.IntStream;
 @ViewScoped
 public class StudentPreferencesEditBean extends DataEdit<StudentPref, Integer> implements Serializable {
 
-    private OptionalPackageRepository optionalPackageRepository = new OptionalPackageRepository();
-    private OptionalCourseRepository optionalCourseRepository = new OptionalCourseRepository();
     private List<OptionalPackage> packageList;
     private List<Course> courseList;
     private List<Integer> posList;
@@ -30,14 +30,27 @@ public class StudentPreferencesEditBean extends DataEdit<StudentPref, Integer> i
     private OptionalPackage optionalPackage;
     private Course course;
 
+    @EJB
+    private StudentsPrefRepository studentsPrefRepository;
+
+    @EJB
+    private OptionalPackageRepository optionalPackageRepository;
+
+    @EJB
+    private OptionalCourseRepository optionalCourseRepository;
+
     public StudentPreferencesEditBean() {
         super();
         entity = new StudentPref();
-        repository = new StudentsPrefRepository();
+    }
+
+    @PostConstruct
+    public void init() {
+        repository = studentsPrefRepository;
     }
 
     public void getOnStudentChange() throws SQLException {
-        packageList = optionalPackageRepository.getByYear(((StudentPref)entity).getStudent().getYear());
+        packageList = optionalPackageRepository.getByYear(((StudentPref) entity).getStudent().getYear());
     }
 
     public void getGetOnPackageChange() {
@@ -46,7 +59,7 @@ public class StudentPreferencesEditBean extends DataEdit<StudentPref, Integer> i
     }
 
     public void onPosChange() {
-        Student student = ((StudentPref)entity).getStudent();
+        Student student = ((StudentPref) entity).getStudent();
     }
 
     public List<OptionalPackage> getPackageList() {

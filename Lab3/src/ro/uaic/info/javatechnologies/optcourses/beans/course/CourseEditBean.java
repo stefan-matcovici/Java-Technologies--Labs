@@ -5,19 +5,29 @@ import ro.uaic.info.javatechnologies.optcourses.beans.DataEdit;
 import ro.uaic.info.javatechnologies.optcourses.models.Course;
 import ro.uaic.info.javatechnologies.optcourses.repository.CourseRepository;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 @Named("courseEditBean")
 @ViewScoped
 public class CourseEditBean extends DataEdit<Course, String> {
+
     private boolean skip;
 
+    @EJB
+    private CourseRepository courseRepository;
 
     public CourseEditBean() {
         super();
         entity = new Course();
-        repository = new CourseRepository();
+    }
+
+    @PostConstruct
+    public void init() {
+        super.init();
+        repository = courseRepository;
     }
 
     public String onFlowProcess(FlowEvent event) {

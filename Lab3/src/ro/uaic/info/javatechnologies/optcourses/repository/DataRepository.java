@@ -1,18 +1,15 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
-import com.sun.org.glassfish.gmbal.ManagedObject;
 import ro.uaic.info.javatechnologies.optcourses.models.AbstractEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import java.net.MalformedURLException;
-import java.sql.SQLException;
+import javax.persistence.PersistenceContext;
 import java.util.List;
-
-@ManagedObject
 public abstract class DataRepository<T extends AbstractEntity<ID>, ID> {
 
     private String schema;
+
+    @PersistenceContext(name = "OptCoursesPU")
     protected EntityManager optCoursesPU;
 
     public DataRepository() {
@@ -21,13 +18,12 @@ public abstract class DataRepository<T extends AbstractEntity<ID>, ID> {
 
     public DataRepository(String schema) {
         this.schema = schema;
-        optCoursesPU = Persistence.createEntityManagerFactory("OptCoursesPU").createEntityManager();
     }
 
     public abstract T getById(ID id);
-    public abstract void save(T t) throws SQLException;
-    public abstract List<T> getAll() throws SQLException, MalformedURLException;
-    public abstract void updateEntities(List<T> entities) throws SQLException;
+    public abstract void save(T t);
+    public abstract List<T> getAll();
+    public abstract void updateEntities(List<T> entities);
 
     public String getSchema() {
         return schema;

@@ -4,9 +4,9 @@ import ro.uaic.info.javatechnologies.optcourses.beans.DataEdit;
 import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
 import ro.uaic.info.javatechnologies.optcourses.repository.LecturerRepository;
 
-import javax.enterprise.event.Event;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -15,18 +15,21 @@ import java.sql.SQLException;
 @ViewScoped
 public class LecturerEditBean extends DataEdit<Lecturer, Integer> implements Serializable {
 
-    @Inject
-    private Event<Lecturer> lecturer;
+    @EJB
+    private LecturerRepository lecturerRepository;
 
     public LecturerEditBean() {
         super();
         entity = new Lecturer();
-        repository = new LecturerRepository(obtainTenant());
+    }
+
+    @PostConstruct
+    public void init() {
+        repository = lecturerRepository;
     }
 
     @Override
     public void submit() throws SQLException {
         super.submit();
-        lecturer.fire((Lecturer)entity);
     }
 }

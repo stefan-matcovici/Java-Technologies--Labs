@@ -5,6 +5,7 @@ import ro.uaic.info.javatechnologies.optcourses.models.Student;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalCourseRepository;
 import ro.uaic.info.javatechnologies.optcourses.repository.StudentRepository;
 
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -14,8 +15,11 @@ import java.util.List;
 @ViewScoped
 public class StatsBean implements Serializable {
 
-    private StudentRepository studentRepository = new StudentRepository();
-    OptionalCourseRepository optionalCourseRepository = new OptionalCourseRepository();
+    @EJB
+    private StudentRepository studentRepository;
+
+    @EJB
+    private OptionalCourseRepository optionalCourseRepository;
 
     public List<Student> getIncompleteStudents() {
         return studentRepository.getStudentsWithIncompletePreferencesList();

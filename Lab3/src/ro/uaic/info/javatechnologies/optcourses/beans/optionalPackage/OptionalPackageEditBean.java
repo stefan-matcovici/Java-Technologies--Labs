@@ -5,6 +5,8 @@ import ro.uaic.info.javatechnologies.optcourses.models.CoursePref;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalPackage;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalPackageRepository;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -20,11 +22,18 @@ public class OptionalPackageEditBean extends DataEdit<OptionalPackage, String> {
     private Double remainingPercent;
     private boolean courseNotDone;
 
+    @EJB
+    private OptionalPackageRepository optionalPackageRepository;
+
     public OptionalPackageEditBean() {
         super();
         entity = new OptionalPackage();
-        repository = new OptionalPackageRepository(obtainTenant());
         courseNotDone = true;
+    }
+
+    @PostConstruct
+    public void init() {
+        repository = optionalPackageRepository;
     }
 
     public void addPref() {

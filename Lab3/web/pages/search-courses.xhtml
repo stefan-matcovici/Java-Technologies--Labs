@@ -9,25 +9,37 @@
             <h:form id="dataEditForm">
                 <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
                 <p:growl id="growl" sticky="true" showDetail="true"/>
-                <h:panelGrid columns="2" columnClasses="label, value">
+                <h:panelGrid columns="3" columnClasses="label, value, checked">
                     <h:outputText value="#{msgs['course.name']}: *"/>
-                    <p:inputText value="#{searchBean.name}" label="Name">
+                    <p:inputText id="nameInput" value="#{searchBean.name}" label="Name" disabled="#{!searchBean.useName}">
                         <f:validateBean disabled="false"/>
                         <p:ajax update="courses"/>
                     </p:inputText>
-                </h:panelGrid>
-                <h:panelGrid columns="2" columnClasses="label, value">
-                    <h:outputText value="Optional:"/>
-                    <p:selectBooleanCheckbox value="#{searchBean.optional}" label="Optional">
+                    <p:selectBooleanCheckbox value="#{searchBean.useName}" label="Name">
+                        <p:ajax update="nameInput"/>
                         <p:ajax update="courses"/>
                     </p:selectBooleanCheckbox>
                 </h:panelGrid>
-                <h:panelGrid columns="2" columnClasses="label, value, value2">
+                <h:panelGrid columns="3" columnClasses="label, value, checked">
+                    <h:outputText value="Optional:"/>
+                    <p:selectBooleanCheckbox id="optionalInput" value="#{searchBean.optional}" label="Optional" disabled="#{!searchBean.useOptional}">
+                        <p:ajax update="courses"/>
+                    </p:selectBooleanCheckbox>
+                    <p:selectBooleanCheckbox value="#{searchBean.useOptional}" label="StudyGroups">
+                        <p:ajax update="optionalInput"/>
+                        <p:ajax update="courses"/>
+                    </p:selectBooleanCheckbox>
+                </h:panelGrid>
+                <h:panelGrid columns="3" columnClasses="label, value, checked">
                     <h:outputText value="StudyGroups: *"/>
-                    <p:inputText value="#{searchBean.studyGroups}" label="StudyGroups">
+                    <p:inputText id="studyGroupsInput" value="#{searchBean.studyGroups}" label="StudyGroups" disabled="#{!searchBean.useStudyGroups}">
                         <f:validateBean disabled="false"/>
                         <p:ajax update="courses"/>
                     </p:inputText>
+                    <p:selectBooleanCheckbox value="#{searchBean.useStudyGroups}" label="StudyGroups">
+                        <p:ajax update="studyGroupsInput"/>
+                        <p:ajax update="courses"/>
+                    </p:selectBooleanCheckbox>
                 </h:panelGrid>
                 <p:focus id="formFocus" context="dataEditForm"/>
             </h:form>
@@ -44,6 +56,10 @@
 
             <p:column headerText="Study groups">
                 <h:outputText value="#{course.studyGroups}" />
+            </p:column>
+
+            <p:column headerText="Year">
+                <h:outputText value="#{course.year}" />
             </p:column>
         </p:dataTable>
     </ui:define>
