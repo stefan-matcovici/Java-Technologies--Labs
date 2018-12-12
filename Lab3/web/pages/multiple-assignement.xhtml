@@ -1,0 +1,51 @@
+<ui:composition template="/WEB-INF/templates/dataEdit.xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:param name="backingBean" value="#{manualAsignementBean}"/>
+    <ui:param name="title" value="Home"/>
+    <ui:param name="headerTitle" value="#{msgs['opt-package-form.package-detail']}"/>
+    <ui:define name="dataEditContent">
+        <style>
+            .label {
+                text-transform: capitalize;
+            }
+
+            .ui-panel-title {
+                text-transform: capitalize;
+            }
+        </style>
+
+        <h:panelGrid id="selected-students" columns="2">
+            <h:outputLabel value="Students in current group"/> <br/>
+            <ui:repeat value="#{manualAsignementBean.selectedStudents}" var="student">
+                <h:outputText value="#{student.firstName} - #{student.lastName}"/> <br/>
+            </ui:repeat>
+        </h:panelGrid>
+
+        <h:panelGrid>
+            <h:selectOneMenu id="select-student" value="#{manualAsignementBean.selectedStudent}"
+                             hideNoSelectionOption="true">
+                <p:ajax listener="#{manualAsignementBean.onSelectedStudent}"
+                        update="selected-students select-student select-course"/>
+                <f:selectItem itemValue="#{null}" itemLabel="--select student--" noSelectionOption="true"/>
+                <f:selectItems value="#{manualAsignementBean.studentsToChose}" var="student"
+                               itemValue="#{student}"
+                               itemLabel="#{student.firstName}  #{student.lastName}"/>
+            </h:selectOneMenu>
+        </h:panelGrid>
+
+        <h:panelGrid>
+            <h:selectOneMenu id="select-course" value="#{manualAsignementBean.optionalCourse}"
+                             hideNoSelectionOption="true">
+                <p:ajax listener="#{manualAsignementBean.onSelectedStudent}" update="available-places"/>
+                <f:selectItem itemValue="#{null}" itemLabel="--select course--" noSelectionOption="true"/>
+                <f:selectItems value="#{manualAsignementBean.optionalCourses}" var="course"
+                               itemValue="#{course}"
+                               itemLabel="#{course.name}  - #{course.optionalPackage.code}"/>
+            </h:selectOneMenu>
+            <h:outputText id="available-places" value="Available places: #{manualAsignementBean.remainingPlaces}" />
+        </h:panelGrid>
+
+    </ui:define>
+</ui:composition>

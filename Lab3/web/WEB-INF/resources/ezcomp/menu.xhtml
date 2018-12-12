@@ -75,6 +75,9 @@
                 <p:menuitem value="#{msgs['stats']}" outcome="stats" icon="fa fa-fw fa-plus">
                     <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
                 </p:menuitem>
+                <p:menuitem value="Add groups to courses" outcome="multiple-form" icon="fa fa-fw fa-plus">
+                    <f:param name="tenant" value="#{backingBean.obtainTenant()}" />
+                </p:menuitem>
             </p:submenu>
         </p:menubar>
     </composite:implementation>

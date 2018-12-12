@@ -1,10 +1,12 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.ejb.LogInterceptor;
 import ro.uaic.info.javatechnologies.optcourses.entities.LecturersEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.Lecturer;
 import ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.Query;
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +35,7 @@ public class LecturerRepository extends DataRepository<Lecturer, Integer> {
     }
 
     @Override
+    @Interceptors(LogInterceptor.class)
     public List<Lecturer> getAll() {
         Query query = optCoursesPU.createQuery("SELECT l FROM LecturersEntity l");
         List<Lecturer> lecturers = ((Collection<LecturersEntity>) query.getResultList()).stream().map(EntityConverter::toLecturer).collect(Collectors.toList());

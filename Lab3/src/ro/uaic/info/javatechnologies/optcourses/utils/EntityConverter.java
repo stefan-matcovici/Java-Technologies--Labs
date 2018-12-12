@@ -66,10 +66,12 @@ public class EntityConverter {
     public static OptionalCourse toOptionalCourse(OptionalCourseEntity coursesEntity) {
         OptionalCourse result = new OptionalCourse();
 
+        result.setId(String.valueOf(coursesEntity.getId()));
         result.setName(coursesEntity.getName());
-        result.setSemester(Semester.valueOf(coursesEntity.getSemester()));
+        result.setSemester(Semester.valueOf(coursesEntity.getSemester().toUpperCase()));
         result.setStudyGroups(coursesEntity.getStudyGroups());
         result.setOptionalPackage(toOptionalPackage(coursesEntity.getPackageEntity()));
+        result.setRemainingPlaces(coursesEntity.getRemainingPlaces());
 
         try {
             result.setUrl(new URL(coursesEntity.getUrl()));
@@ -86,6 +88,7 @@ public class EntityConverter {
     public static OptionalCourseEntity toOptionalCourseEntity(OptionalCourse course) {
         OptionalCourseEntity result = new OptionalCourseEntity();
 
+        result.setId(Integer.parseInt(course.getId()));
         result.setName(course.getName());
         result.setSemester(course.getSemester().getName());
         result.setStudyGroups(course.getStudyGroups());
@@ -94,6 +97,7 @@ public class EntityConverter {
         result.setYear(course.getYear());
         result.setLecturer(toLecturerEntity(course.getLecturer()));
         result.setPackageEntity(toOptionalPackageEntity(course.getOptionalPackage()));
+        result.setRemainingPlaces(course.getRemainingPlaces());
 
         return result;
     }

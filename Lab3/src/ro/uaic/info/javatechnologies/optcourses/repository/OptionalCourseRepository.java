@@ -1,7 +1,7 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
 import ro.uaic.info.javatechnologies.optcourses.entities.CoursesEntity;
-import ro.uaic.info.javatechnologies.optcourses.models.Course;
+import ro.uaic.info.javatechnologies.optcourses.entities.OptionalCourseEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.CoursePreferenceAmongStudents;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalCourse;
 import ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter;
@@ -9,9 +9,11 @@ import ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter.toMandatoryCourse;
+import static ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter.toOptionalCourse;
 import static ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter.toOptionalCourseEntity;
 
 @Stateless
@@ -26,7 +28,17 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
 
     @Override
     public OptionalCourse getById(String s) {
-        return null;
+        Query query = optCoursesPU.createQuery("SELECT c FROM OptionalCourseEntity c where c.id = " + s);
+        List<OptionalCourse> courses = ((Collection<OptionalCourseEntity>) query.getResultList()).stream().map(EntityConverter::toOptionalCourse).collect(Collectors.toList());
+
+        return courses.get(0);
+    }
+
+    public List<OptionalCourse> getByYear(int year) {
+        Query query = optCoursesPU.createQuery("SELECT c FROM OptionalCourseEntity c where c.year = " + year);
+        List<OptionalCourse> courses = ((Collection<OptionalCourseEntity>) query.getResultList()).stream().map(EntityConverter::toOptionalCourse).collect(Collectors.toList());
+
+        return courses;
     }
 
     @Override
@@ -39,10 +51,10 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
         return null;
     }
 
-    public Course getCourseById(String id) {
-        Query query = optCoursesPU.createQuery("SELECT e FROM CoursesEntity e where e.id = " + id);
+    public OptionalCourse getCourseById(String id) {
+        Query query = optCoursesPU.createQuery("SELECT e FROM OptionalCourseEntity e where e.id = " + id);
 
-        return toMandatoryCourse((CoursesEntity) query.getResultList().get(0));
+        return toOptionalCourse((OptionalCourseEntity) query.getResultList().get(0));
     }
 
     public List<CoursePreferenceAmongStudents> getCoursesPreferenesAmongStudents() {

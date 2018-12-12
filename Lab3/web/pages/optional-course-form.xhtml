@@ -31,6 +31,9 @@
                             <f:selectItems value="#{semesterBean.statuses}"/>
                         </h:selectOneMenu>
 
+                        <h:outputText value="Places: "/>
+                        <p:inputText value="#{optionalCourseEditbean.entity.remainingPlaces}"/>
+
                         <h:outputText value="#{msgs['courses.lecturer']}: "/>
                         <h:selectOneMenu value="#{optionalCourseEditbean.entity.lecturer}">
                             <f:selectItems value="#{lecturerAll.lecturers}" var="lecturer"

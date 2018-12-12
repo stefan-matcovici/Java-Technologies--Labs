@@ -6,6 +6,7 @@ import javax.persistence.*;
 @DiscriminatorValue("2")
 public class OptionalCourseEntity extends CoursesEntity {
     private PackagesEntity packageEntity;
+    private int remainingPlaces;
 
     @ManyToOne
     @JoinTable(name="packages_courses",
@@ -14,6 +15,16 @@ public class OptionalCourseEntity extends CoursesEntity {
     )
     public PackagesEntity getPackageEntity() {
         return packageEntity;
+    }
+
+    @Basic
+    @Column(name = "remaining_places", nullable = false)
+    public int getRemainingPlaces() {
+        return remainingPlaces;
+    }
+
+    public void setRemainingPlaces(int remainingPlaces) {
+        this.remainingPlaces = remainingPlaces;
     }
 
     public void setPackageEntity(PackagesEntity packageEntity) {
