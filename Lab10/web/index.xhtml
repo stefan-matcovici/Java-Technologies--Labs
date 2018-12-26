@@ -1,0 +1,19 @@
+<ui:composition template="/WEB-INF/templates/page.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+    <ui:param name="pageTitle" value="Login"/>
+    <ui:define name="content">
+        <h:form id="myform">
+            <h:messages globalOnly="true" style="color:red;margin:8px;"/>
+
+            <h:outputText value="Username: "/>
+            <h:inputText label="Username" value="#{loginBean.user.username}"/><br/><br/>
+            <h:outputText value="Password: "/>
+            <h:inputSecret value="#{loginBean.user.password}"/><br/><br/>
+            <h:commandButton value="login" action="#{loginBean.login}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

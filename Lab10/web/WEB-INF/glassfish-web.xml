@@ -1,0 +1,6 @@
+<glassfish-web-app>
+    <resource-ref>
+        <res-ref-name>document-manager</res-ref-name>
+        <jndi-name>jdbc/docs</jndi-name>
+    </resource-ref>
+</glassfish-web-app>

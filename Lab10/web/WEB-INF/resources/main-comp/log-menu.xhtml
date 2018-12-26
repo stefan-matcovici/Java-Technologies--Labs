@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://xmlns.jcp.org/jsf/composite" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+    <composite:interface>
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:growl id="messages"/>
+
+            <p:menubar>
+                <p:menuitem value="Add period" outcome="register" rendered="#{authService.currentUser.type eq 'admin'}" />
+
+                <p:submenu label="Documents" icon="fa fa-fw fa-dropbox">
+                    <p:menuitem value="Add" outcome="register" icon="fa fa-fw fa-plus" rendered="#{authService.currentUser.type eq 'admin'}"/>
+                    <p:separator/>
+                    <p:menuitem value="View" outcome="register" icon="fa fa-fw fa-table"/>
+                </p:submenu>
+
+                <f:facet name="options">
+                    <p:commandButton value="Logout" action="#{loginBean.logout}" />
+                </f:facet>
+            </p:menubar>
+        </h:form>
+    </composite:implementation>
+
+</h:body>
+</html>

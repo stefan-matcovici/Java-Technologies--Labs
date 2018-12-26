@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="DocsPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
+        <jta-data-source>jdbc/docs</jta-data-source>
+        <class>ro.uaic.info.technologies.documentmanager.entities.UsersEntity</class>
+
+        <properties>
+            <property name="eclipselink.canonicalmodel.subpackage"
+                      value="ro.uaic.info.javatechnologies.documentmerger.entities"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/docs_manager"/>
+            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
+        </properties>
+
+    </persistence-unit>
+</persistence>
