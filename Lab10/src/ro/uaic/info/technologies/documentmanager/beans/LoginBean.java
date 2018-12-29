@@ -1,5 +1,6 @@
 package ro.uaic.info.technologies.documentmanager.beans;
 
+import ro.uaic.info.technologies.documentmanager.interceptors.ValidPeriod;
 import ro.uaic.info.technologies.documentmanager.models.User;
 import ro.uaic.info.technologies.documentmanager.repositories.UserRepository;
 import ro.uaic.info.technologies.documentmanager.services.AuthService;
@@ -34,6 +35,7 @@ public class LoginBean implements Serializable {
         return "index?faces-redirect=true";
     }
 
+    @ValidPeriod
     public String register() {
         userRepository.addGuestUser(user);
 

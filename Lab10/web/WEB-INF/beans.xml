@@ -7,5 +7,7 @@
     bean-discovery-mode="all">
     <interceptors>
         <class>ro.uaic.info.technologies.documentmanager.interceptors.LoggedInInterceptor</class>
+        <class>ro.uaic.info.technologies.documentmanager.interceptors.AdminLoggedInInterceptor</class>
+        <class>ro.uaic.info.technologies.documentmanager.interceptors.ValidPeriodInterceptor</class>
     </interceptors>
 </beans>

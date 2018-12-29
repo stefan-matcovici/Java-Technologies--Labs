@@ -13,7 +13,12 @@
             <p:growl id="messages"/>
 
             <p:menubar>
-                <p:menuitem value="Add period" outcome="register" rendered="#{authService.currentUser.type eq 'admin'}" />
+                <p:submenu label="Documents" icon="fa fa-fw fa-dropbox" rendered="#{authService.currentUser.type eq 'admin'}">
+                    <p:menuitem value="Add period" outcome="add-period" icon="fa fa-fw fa-plus"/>
+                    <p:separator/>
+                    <p:menuitem value="View" outcome="register" icon="fa fa-fw fa-table"/>
+                </p:submenu>
+
 
                 <p:submenu label="Documents" icon="fa fa-fw fa-dropbox">
                     <p:menuitem value="Add" outcome="register" icon="fa fa-fw fa-plus" rendered="#{authService.currentUser.type eq 'admin'}"/>

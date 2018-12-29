@@ -25,5 +25,12 @@
             <to-view-id>/home.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>add-period</from-outcome>
+            <to-view-id>/add-period.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
   
 </faces-config>
