@@ -3,4 +3,5 @@
         <res-ref-name>document-manager</res-ref-name>
         <jndi-name>jdbc/docs</jndi-name>
     </resource-ref>
+    <class-loader delegate="false" />
 </glassfish-web-app>

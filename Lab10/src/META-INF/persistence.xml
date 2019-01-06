@@ -7,6 +7,7 @@
         <jta-data-source>jdbc/docs</jta-data-source>
         <class>ro.uaic.info.technologies.documentmanager.entities.UsersEntity</class>
         <class>ro.uaic.info.technologies.documentmanager.entities.PeriodsEntity</class>
+        <class>ro.uaic.info.technologies.documentmanager.entities.DocumentsEntity</class>
 
         <properties>
             <property name="eclipselink.canonicalmodel.subpackage"

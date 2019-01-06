@@ -1,9 +1,7 @@
 package ro.uaic.info.technologies.documentmanager.utils;
 
-import ro.uaic.info.technologies.documentmanager.entities.AdminEntity;
-import ro.uaic.info.technologies.documentmanager.entities.GuestEntity;
-import ro.uaic.info.technologies.documentmanager.entities.PeriodsEntity;
-import ro.uaic.info.technologies.documentmanager.entities.UsersEntity;
+import ro.uaic.info.technologies.documentmanager.entities.*;
+import ro.uaic.info.technologies.documentmanager.models.Document;
 import ro.uaic.info.technologies.documentmanager.models.Period;
 import ro.uaic.info.technologies.documentmanager.models.User;
 
@@ -63,5 +61,25 @@ public class EntityConverterUtil {
         result.setEndDate(periodsEntity.getEndDate());
         result.setUser(toUser(periodsEntity.getAddedBy()));
         return result;
+    }
+
+    public static DocumentsEntity toDocumentsEntity(Document document) {
+        DocumentsEntity documentsEntity = new DocumentsEntity();
+        if (document.getId() != null) {
+            documentsEntity.setId(document.getId());
+        }
+        documentsEntity.setRegistrationNumber(document.getRegistrationNumber());
+        documentsEntity.setName(document.getName());
+
+        return documentsEntity;
+    }
+
+    public static Document toDocument(DocumentsEntity documentsEntity) {
+        Document document = new Document();
+        document.setId(documentsEntity.getId());
+        document.setRegistrationNumber(documentsEntity.getRegistrationNumber());
+        document.setName(documentsEntity.getName());
+
+        return document;
     }
 }
