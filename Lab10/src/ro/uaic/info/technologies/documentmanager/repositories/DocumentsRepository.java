@@ -1,11 +1,18 @@
 package ro.uaic.info.technologies.documentmanager.repositories;
 
 import ro.uaic.info.technologies.documentmanager.entities.DocumentsEntity;
+import ro.uaic.info.technologies.documentmanager.entities.PeriodsEntity;
 import ro.uaic.info.technologies.documentmanager.models.Document;
+import ro.uaic.info.technologies.documentmanager.utils.EntityConverterUtil;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ro.uaic.info.technologies.documentmanager.utils.EntityConverterUtil.toDocumentsEntity;
 
@@ -18,5 +25,11 @@ public class DocumentsRepository {
     public void addDocument(Document document) {
         DocumentsEntity documentsEntity = toDocumentsEntity(document);
         entityManager.persist(documentsEntity);
+    }
+
+    public List<Document> getAllDocuments() {
+        Query query = entityManager.createQuery("SELECT document FROM DocumentsEntity document");
+
+        return ((Collection<DocumentsEntity>) query.getResultList()).stream().map(EntityConverterUtil::toDocument).collect(Collectors.toList());
     }
 }

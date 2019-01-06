@@ -1,0 +1,36 @@
+<ui:composition template="/WEB-INF/templates/log/page.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+>
+
+    <ui:param name="pageTitle" value="View docs"/>
+    <ui:define id="content" name="content">
+        <p:outputPanel id="output-panel" autoUpdate="true">
+            <p:dataTable id="docsTable" var="doc" value="#{documentsView.documents}">
+                <p:column headerText="Id">
+                    <h:outputText value="#{doc.id}" />
+                </p:column>
+
+                <p:column headerText="Registration number">
+                    <h:outputText value="#{doc.registrationNumber}" />
+                </p:column>
+
+                <p:column headerText="Name">
+                    <h:outputText value="#{doc.name}" />
+                </p:column>
+
+                <p:column headerText="Download">
+                    <h:form>
+                        <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="pi pi-arrow-down">
+                            <p:fileDownload value="#{documentsView.getFile(doc.registrationNumber, doc.name)}" />
+                        </p:commandButton>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </p:outputPanel>
+    </ui:define>
+</ui:composition>
+

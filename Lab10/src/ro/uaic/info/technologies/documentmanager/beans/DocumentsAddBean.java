@@ -38,7 +38,6 @@ public class DocumentsAddBean implements Serializable {
     @Any
     private Event<Document> documentEvent;
 
-
     @Inject
     private DocumentService documentService;
 
