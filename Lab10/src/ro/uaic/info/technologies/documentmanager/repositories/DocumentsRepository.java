@@ -32,4 +32,19 @@ public class DocumentsRepository {
 
         return ((Collection<DocumentsEntity>) query.getResultList()).stream().map(EntityConverterUtil::toDocument).collect(Collectors.toList());
     }
+
+    public Document getDocumentById(Integer id) {
+        Query query = entityManager.createQuery("SELECT document FROM DocumentsEntity document WHERE document.id=:id");
+        query.setParameter("id", id);
+
+        return EntityConverterUtil.toDocument(((DocumentsEntity) query.getSingleResult()));
+    }
+
+    public void deleteDocumentById(Integer id) {
+        Query query = entityManager.createQuery("SELECT document FROM DocumentsEntity document WHERE document.id=:id");
+        query.setParameter("id", id);
+
+        DocumentsEntity documentsEntity = ((DocumentsEntity) query.getSingleResult());
+        entityManager.remove(documentsEntity);
+    }
 }
