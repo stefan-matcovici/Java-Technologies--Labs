@@ -1,6 +1,7 @@
 package ro.uaic.info.javatechnologies.optcourses.beans;
 
 import ro.uaic.info.javatechnologies.optcourses.ejb.AssignementBean;
+import ro.uaic.info.javatechnologies.optcourses.ejb.CourseCheckingBean;
 import ro.uaic.info.javatechnologies.optcourses.models.OptionalCourse;
 import ro.uaic.info.javatechnologies.optcourses.models.Student;
 import ro.uaic.info.javatechnologies.optcourses.repository.OptionalCourseRepository;
@@ -8,7 +9,9 @@ import ro.uaic.info.javatechnologies.optcourses.repository.StudentRepository;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -30,7 +33,9 @@ public class ManualAssignementBean implements Serializable {
     @EJB
     AssignementBean assignementBean;
 
-    private List<Student> selectedStudents = new ArrayList<>();
+    @EJB
+    CourseCheckingBean courseCheckingBean;
+
     private List<Student> studentsToChose = new ArrayList<>();
     private List<OptionalCourse> optionalCourses = new ArrayList<>();
     private Student selectedStudent;
@@ -42,9 +47,9 @@ public class ManualAssignementBean implements Serializable {
     }
 
     public void onSelectedStudent() {
-        selectedStudents.add(selectedStudent);
-        studentsToChose = studentRepository.getAll().stream().filter(s -> !selectedStudents.contains(s)).collect(Collectors.toList());
-        optionalCourses = optionalCourseRepository.getByYear(selectedStudents.get(0).getYear());
+        assignementBean.addStudent(selectedStudent);
+        studentsToChose = studentRepository.getAll().stream().filter(s -> !assignementBean.getSelectedStudents().contains(s)).collect(Collectors.toList());
+        optionalCourses = optionalCourseRepository.getByYear(assignementBean.getSelectedStudents().get(0).getYear());
         selectedStudent = null;
     }
 
@@ -52,7 +57,7 @@ public class ManualAssignementBean implements Serializable {
         if (optionalCourse == null) {
             return "No optional course selected.";
         } else {
-            return String.valueOf(optionalCourse.getRemainingPlaces());
+            return String.valueOf(courseCheckingBean.getCourseRemainingPlaces(optionalCourse));
         }
     }
 
@@ -61,18 +66,27 @@ public class ManualAssignementBean implements Serializable {
     }
 
     public void submit() {
-        if (optionalCourse != null && optionalCourse.getRemainingPlaces() < selectedStudents.size()) {
+        if (assignementBean.getOptionalCourse() != null && courseCheckingBean.getCourseRemainingPlaces(optionalCourse) < assignementBean.getSelectedStudents().size()) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage("Too many students!"));
+        }
+        else {
+            try {
+                assignementBean.submit(optionalCourse);
+            } catch (EJBException e) {
+                System.out.println(e.getCausedByException().toString());
+            }
+            finally {
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                NavigationHandler myNav = facesContext.getApplication().getNavigationHandler();
+                myNav.handleNavigation(facesContext, null, "index");
+            }
+
         }
     }
 
     public List<Student> getSelectedStudents() {
-        return selectedStudents;
-    }
-
-    public void setSelectedStudents(List<Student> selectedStudents) {
-        this.selectedStudents = selectedStudents;
+        return assignementBean.getSelectedStudents();
     }
 
     public List<Student> getStudentsToChose() {

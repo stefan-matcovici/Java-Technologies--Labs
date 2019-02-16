@@ -2,6 +2,7 @@ package ro.uaic.info.javatechnologies.optcourses.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +14,7 @@ public class StudentsEntity implements Serializable {
     private String email;
     private Integer year;
     private List<StudentPrefsEntity> studentPrefsEntityList;
+    private List<CoursesEntity> optionalCourses = new ArrayList<>();
 
     @Id
     @Column(name = "id", nullable = false, length = 20)
@@ -57,6 +59,22 @@ public class StudentsEntity implements Serializable {
 
     public void setStudentPrefsEntityList(List<StudentPrefsEntity> studentPrefsEntityList) {
         this.studentPrefsEntityList = studentPrefsEntityList;
+    }
+
+    @ManyToMany(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name = "student_courses",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    public List<CoursesEntity> getOptionalCourses() {
+        return optionalCourses;
+    }
+
+    public void setOptionalCourses(List<CoursesEntity> optionalCourses) {
+        this.optionalCourses = optionalCourses;
     }
 
     @Override

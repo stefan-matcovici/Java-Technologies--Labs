@@ -36,7 +36,9 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
 
     public List<OptionalCourse> getByYear(int year) {
         Query query = optCoursesPU.createQuery("SELECT c FROM OptionalCourseEntity c where c.year = " + year);
-        List<OptionalCourse> courses = ((Collection<OptionalCourseEntity>) query.getResultList()).stream().map(EntityConverter::toOptionalCourse).collect(Collectors.toList());
+        Collection<OptionalCourseEntity> courseEntities = query.getResultList();
+//        courseEntities.forEach(optCoursesPU::refresh);
+        List<OptionalCourse> courses = courseEntities.stream().map(EntityConverter::toOptionalCourse).collect(Collectors.toList());
 
         return courses;
     }
@@ -55,6 +57,12 @@ public class OptionalCourseRepository extends DataRepository<OptionalCourse, Str
         Query query = optCoursesPU.createQuery("SELECT e FROM OptionalCourseEntity e where e.id = " + id);
 
         return toOptionalCourse((OptionalCourseEntity) query.getResultList().get(0));
+    }
+
+    public OptionalCourseEntity getEntityById(String id) {
+        Query query = optCoursesPU.createQuery("SELECT e FROM OptionalCourseEntity e where e.id = " + id);
+
+        return (OptionalCourseEntity) query.getResultList().get(0);
     }
 
     public List<CoursePreferenceAmongStudents> getCoursesPreferenesAmongStudents() {

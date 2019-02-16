@@ -1,5 +1,6 @@
 package ro.uaic.info.javatechnologies.optcourses.repository;
 
+import ro.uaic.info.javatechnologies.optcourses.entities.OptionalCourseEntity;
 import ro.uaic.info.javatechnologies.optcourses.entities.StudentsEntity;
 import ro.uaic.info.javatechnologies.optcourses.models.Student;
 import ro.uaic.info.javatechnologies.optcourses.utils.EntityConverter;
@@ -38,6 +39,18 @@ public class StudentRepository extends DataRepository<Student, Integer> {
         List<Student> students = ((Collection<StudentsEntity>) query.getResultList()).stream().map(EntityConverter::toStudent).collect(Collectors.toList());
 
         return students;
+    }
+
+    public StudentsEntity getEntityById(String id) {
+        Query query = optCoursesPU.createQuery("SELECT e FROM StudentsEntity e where e.id = " + id);
+
+        return (StudentsEntity) query.getResultList().get(0);
+    }
+
+    public void addOptionalCourseToStudent(Student student, OptionalCourseEntity optionalCourse) {
+        StudentsEntity studentsEntity = getEntityById(String.valueOf(student.getId()));
+        studentsEntity.getOptionalCourses().add(optionalCourse);
+        optCoursesPU.merge(studentsEntity);
     }
 
     public List<Student> getStudentsWithIncompletePreferencesList() {

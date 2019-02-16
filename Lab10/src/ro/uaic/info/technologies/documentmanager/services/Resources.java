@@ -18,7 +18,6 @@ public class Resources implements Serializable {
     private EntityManager docsPu;
 
     @Produces
-    @SessionScoped
     public EntityManager getEntityManager() {
         return docsPu;
     }

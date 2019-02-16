@@ -100,12 +100,7 @@ public class Course extends AbstractEntity<String> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Course course = (Course) o;
-        return year == course.year &&
-                studyGroups == course.studyGroups &&
-                Objects.equals(name, course.name) &&
-                semester == course.semester &&
-                Objects.equals(url, course.url) &&
-                Objects.equals(lecturer, course.lecturer);
+        return getId().equals(course.getId());
     }
 
     @Override

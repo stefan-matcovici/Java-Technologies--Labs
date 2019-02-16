@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@ApplicationScoped
 public class DocumentService implements Serializable {
 
     public void uploadDocument(byte[] rawDocument, Integer registrationNumber) {

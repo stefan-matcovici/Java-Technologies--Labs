@@ -71,6 +71,8 @@ public class EntityConverterUtil {
         documentsEntity.setRegistrationNumber(document.getRegistrationNumber());
         documentsEntity.setName(document.getName());
 
+        documentsEntity.setUser(toUsersEntity(document.getUser()));
+
         return documentsEntity;
     }
 
@@ -79,6 +81,10 @@ public class EntityConverterUtil {
         document.setId(documentsEntity.getId());
         document.setRegistrationNumber(documentsEntity.getRegistrationNumber());
         document.setName(documentsEntity.getName());
+
+        if (documentsEntity.getUser() != null) {
+            document.setUser(toUser(documentsEntity.getUser()));
+        }
 
         return document;
     }

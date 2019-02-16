@@ -38,7 +38,7 @@
         <h:panelGrid>
             <h:selectOneMenu id="select-course" value="#{manualAsignementBean.optionalCourse}"
                              hideNoSelectionOption="true">
-                <p:ajax listener="#{manualAsignementBean.onSelectedStudent}" update="available-places"/>
+                <p:ajax update="available-places"/>
                 <f:selectItem itemValue="#{null}" itemLabel="--select course--" noSelectionOption="true"/>
                 <f:selectItems value="#{manualAsignementBean.optionalCourses}" var="course"
                                itemValue="#{course}"

@@ -2,6 +2,7 @@ package ro.uaic.info.technologies.documentmanager.webservices;
 
 import ro.uaic.info.technologies.documentmanager.models.Document;
 import ro.uaic.info.technologies.documentmanager.repositories.DocumentsRepository;
+import ro.uaic.info.technologies.documentmanager.repositories.specifications.DocumentsRepositorySpecification;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;

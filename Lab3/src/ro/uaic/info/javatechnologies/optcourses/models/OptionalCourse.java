@@ -13,9 +13,8 @@ public class OptionalCourse extends Course {
         optionalPackage = new OptionalPackage();
     }
 
-    public OptionalCourse(String id, String name, int year, Semester semester, URL url, int studyGroups, int remainingPlaces) {
+    public OptionalCourse(String id, String name, int year, Semester semester, URL url, int studyGroups) {
         super(id, name, year, semester, url, null, studyGroups);
-        this.remainingPlaces = remainingPlaces;
     }
 
     public OptionalCourse(String id, String name, int year, Semester semester, URL url, Lecturer lecturer, int studyGroups, OptionalPackage optionalPackage) {
@@ -46,10 +45,7 @@ public class OptionalCourse extends Course {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OptionalCourse that = (OptionalCourse) o;
-        return that.getId().equals(getId());
+        return super.equals(o);
     }
 
     @Override
@@ -59,6 +55,6 @@ public class OptionalCourse extends Course {
 
     @Override
     public String toString() {
-        return getId() + "," + getName() + "," + getYear() + "," + (getSemester()!=null ? getSemester().getName() + "," :"") + (getUrl() != null ?getUrl().toString() +",":"") + getStudyGroups() +"," + remainingPlaces;
+        return getId() + "," + getName() + "," + getYear() + "," + (getSemester()!=null ? getSemester().getName() + "," :"") + (getUrl() != null ?getUrl().toString() +",":"") + getStudyGroups();
     }
 }

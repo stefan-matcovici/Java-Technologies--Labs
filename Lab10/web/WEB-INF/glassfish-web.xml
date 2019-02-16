@@ -4,4 +4,14 @@
         <jndi-name>jdbc/docs</jndi-name>
     </resource-ref>
     <class-loader delegate="false" />
+
+    <security-role-mapping>
+        <role-name>admin</role-name>
+        <group-name>admin</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>guest</role-name>
+        <group-name>guest</group-name>
+    </security-role-mapping>
 </glassfish-web-app>

@@ -41,6 +41,8 @@ public class EntityConverter {
 
     public static OptionalPackage toOptionalPackage(PackagesEntity entity) {
         OptionalPackage result = new OptionalPackage();
+        if (entity == null)
+            return result;
         result.setId(String.valueOf(entity.getId()));
         result.setCode(entity.getCode());
         result.setYear(entity.getYear());
@@ -131,7 +133,9 @@ public class EntityConverter {
         if (course.getUrl() != null)
             result.setUrl(course.getUrl().toString());
         result.setYear(course.getYear());
-        result.setLecturer(toLecturerEntity(course.getLecturer()));
+        if (course.getLecturer() != null) {
+            result.setLecturer(toLecturerEntity(course.getLecturer()));
+        }
 
         return result;
     }

@@ -1,5 +1,7 @@
 package ro.uaic.info.javatechnologies.optcourses.entities;
 
+import org.eclipse.persistence.annotations.ReturnInsert;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,6 +21,7 @@ public class OptionalCourseEntity extends CoursesEntity {
 
     @Basic
     @Column(name = "remaining_places", nullable = false)
+    @ReturnInsert(returnOnly=true)
     public int getRemainingPlaces() {
         return remainingPlaces;
     }

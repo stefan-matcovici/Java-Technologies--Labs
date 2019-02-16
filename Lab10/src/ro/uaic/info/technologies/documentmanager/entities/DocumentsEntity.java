@@ -9,6 +9,7 @@ public class DocumentsEntity {
     private int id;
     private int registrationNumber;
     private String name;
+    private UsersEntity user;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -39,6 +40,16 @@ public class DocumentsEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    public UsersEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UsersEntity user) {
+        this.user = user;
     }
 
     @Override

@@ -17,11 +17,14 @@
         <class>ro.uaic.info.javatechnologies.optcourses.entities.PackagesEntity</class>
         <class>ro.uaic.info.javatechnologies.optcourses.entities.PackagesCoursesEntity</class>
         <class>ro.uaic.info.javatechnologies.optcourses.entities.StudentPrefsEntity</class>
+        <!--<class>ro.uaic.info.javatechnologies.optcourses.entities.StudentCoursesEntity</class>-->
 
         <properties>
             <property name="eclipselink.canonicalmodel.subpackage"
                       value="ro.uaic.info.javatechnologies.optcourses.entities"/>
             <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/optcourses_jpa"/>
+            <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
         </properties>
 
     </persistence-unit>

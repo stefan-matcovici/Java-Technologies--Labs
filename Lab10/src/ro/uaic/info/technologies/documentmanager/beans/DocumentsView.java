@@ -3,9 +3,9 @@ package ro.uaic.info.technologies.documentmanager.beans;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import ro.uaic.info.technologies.documentmanager.interceptors.LoggedIn;
 import ro.uaic.info.technologies.documentmanager.models.Document;
 import ro.uaic.info.technologies.documentmanager.repositories.DocumentsRepository;
+import ro.uaic.info.technologies.documentmanager.repositories.specifications.DocumentsRepositorySpecification;
 import ro.uaic.info.technologies.documentmanager.services.DocumentService;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +13,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
@@ -23,7 +22,6 @@ import java.util.List;
 
 @Named
 @RequestScoped
-@LoggedIn
 public class DocumentsView implements Serializable {
 
     @EJB

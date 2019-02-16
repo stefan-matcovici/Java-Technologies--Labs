@@ -22,7 +22,7 @@ public class OptionalCourseConverter implements Converter {
 
         OptionalCourse course = null;
         try {
-            course = new OptionalCourse(attributes[0], attributes[1], Integer.valueOf(attributes[2]), Semester.valueOf(attributes[3].toUpperCase()), new URL(attributes[4]), Integer.valueOf(attributes[5]), Integer.valueOf(attributes[6]));
+            course = new OptionalCourse(attributes[0], attributes[1], Integer.valueOf(attributes[2]), Semester.valueOf(attributes[3].toUpperCase()), new URL(attributes[4]), Integer.valueOf(attributes[5]));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -2,11 +2,12 @@ package ro.uaic.info.technologies.documentmanager.beans;
 
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
-import ro.uaic.info.technologies.documentmanager.interceptors.AdminLoggedIn;
-import ro.uaic.info.technologies.documentmanager.interceptors.LoggedIn;
+import ro.uaic.info.technologies.documentmanager.interceptors.ValidPeriod;
 import ro.uaic.info.technologies.documentmanager.models.Document;
 import ro.uaic.info.technologies.documentmanager.producers.DocumentRegistrationNumber;
 import ro.uaic.info.technologies.documentmanager.repositories.DocumentsRepository;
+import ro.uaic.info.technologies.documentmanager.repositories.specifications.DocumentsRepositorySpecification;
+import ro.uaic.info.technologies.documentmanager.services.AuthService;
 import ro.uaic.info.technologies.documentmanager.services.DocumentService;
 
 import javax.ejb.EJB;
@@ -21,8 +22,6 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-@LoggedIn
-@AdminLoggedIn
 public class DocumentsAddBean implements Serializable {
 
     private UploadedFile file;
@@ -30,6 +29,9 @@ public class DocumentsAddBean implements Serializable {
     @Inject
     @DocumentRegistrationNumber
     private int registrationNumber;
+
+    @Inject
+    AuthService authService;
 
     @EJB
     private DocumentsRepository documentsRepository;
@@ -49,10 +51,12 @@ public class DocumentsAddBean implements Serializable {
         this.file = file;
     }
 
+    @ValidPeriod
     public void upload() {
         if(file != null) {
             documentService.uploadDocument(file.getContents(), registrationNumber);
             Document newDocument = new Document(registrationNumber, file.getFileName());
+            newDocument.setUser(authService.getCurrentUser());
             documentsRepository.addDocument(newDocument);
             documentEvent.fire(newDocument);
             FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");

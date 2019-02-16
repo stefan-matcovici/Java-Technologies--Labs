@@ -1,6 +1,8 @@
 package ro.uaic.info.javatechnologies.optcourses.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "courses", schema = "public", catalog = "optcourses_jpa")
@@ -18,6 +20,7 @@ public class CoursesEntity {
     private String url;
     private int studyGroups;
     private LecturersEntity lecturer;
+    private List<StudentsEntity> students = new ArrayList<>();
 
     @Id
     @Column(name = "id", nullable = false)
@@ -93,6 +96,14 @@ public class CoursesEntity {
         this.lecturer = lecturer;
     }
 
+    @ManyToMany(mappedBy = "optionalCourses")
+    public List<StudentsEntity> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<StudentsEntity> students) {
+        this.students = students;
+    }
 
     @Override
     public boolean equals(Object o) {

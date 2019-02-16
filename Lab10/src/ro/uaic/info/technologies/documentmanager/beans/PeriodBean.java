@@ -14,8 +14,6 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-@LoggedIn
-@AdminLoggedIn
 public class PeriodBean implements Serializable {
 
     @EJB
@@ -30,7 +28,7 @@ public class PeriodBean implements Serializable {
         period.setUser(authService.getCurrentUser());
         periodRepository.addPeriod(period);
 
-        return "home?faces-redirect=true";
+        return "pages/home?faces-redirect=true";
     }
 
     public Period getPeriod() {
