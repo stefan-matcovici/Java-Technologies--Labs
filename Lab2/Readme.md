@@ -1,4 +1,4 @@
-# Java Servlet Technologies Lab1
+# Java Servlet Technologies Lab2
 The purpose of the application is to integrate various components, such as JSP pages, servlets and JavaBeans.
 
 #####  Starting from the problem described in lab 1, create a Web application containing the following components:
