@@ -36,3 +36,22 @@
 * Configure a connection pool and a JDBC resource using an administrative tool (such as GlassFish Console).
 * Create DataSource objects using either JNDI directly or resource injection.
 * Consider the situation when the application should be implemented using a multi tenant architecture: a single application instance accessing multiple, isolated databases, having the same structure.
+
+# Java Technologies Lab7
+
+## Java Persistence API (JPA)
+##### Rewrite the persistence layer of the application created for the previous laboratory using a technology that implements the JPA specifications:
+* Define the [persistence unit](./src/META-INF/persistence.xml) using a data source configured as a JDBC Resource.
+* Create the EntityManager objects using dependency injection.
+* Define the [mappings](./src/ro/uaic/info/javatechnologies/optcourses/entities] using JPA-only annotations. You should have at least a One-To-Many association.
+* Implement the [repository classes](./src/ro/uaic/info/javatechnologies/optcourses/repository) using JPA-QL.
+* Create two new tables for storing in the database students and their preferences regarding the optional courses. Each student should offer a complete sorted list of the optional courses in each package defined for his year of study.
+* Use [inheritance mapping](./src/ro/uaic/info/javatechnologies/optcourses/entities/CoursesEntity.java] for courses and optional courses and/or students and lecturers.
+* Define the following queries:
+  * All students.
+  * Students that have incomplete preference lists.
+  * All optional courses together with the degree of preference among students.
+* Create two new tables for storing in the database all the grades obtained by the students and the preferences of the lecturers, regarding the students that will be admitted to their optional courses. These preferences will not be individual, they will take into condideration the grades obtained on some courses.
+###### Notes
+* It is required to use a JPA implementation and not just any third-party ORM library.
+* A bonus will be given for adapting the Web interface to the new specifications.
