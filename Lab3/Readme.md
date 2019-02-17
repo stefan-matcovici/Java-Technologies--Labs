@@ -55,3 +55,11 @@
 ###### Notes
 * It is required to use a JPA implementation and not just any third-party ORM library.
 * A bonus will be given for adapting the Web interface to the new specifications.
+
+# Java Technologies Lab8
+
+## JPA Criteria API (JPA)
+##### Continue the JSF application created in the previous laboratories, adding a ["search page"](./web/pages/search-courses.xhtml). This page will allow students to search for courses, using various filters: by name, by type (compulsory/optional), by capacity, etc.
+* Each filter will have a checkox - if it is checked then the filter will be taken into consideration.
+* The query must be implemented using JPA Criteria API.
+
