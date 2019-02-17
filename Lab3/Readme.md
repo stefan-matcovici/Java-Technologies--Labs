@@ -1,4 +1,4 @@
-# Java Servlet Technologies Lab4
+# Java Technologies Lab4
 
 ## JavaServer Faces
 ##### Create a Web application using JavaServer Faces technology, dedicated to optional course allocation. The JSF application (for now...) will have the following components:
@@ -12,7 +12,7 @@
 * It is recommended to use an Ajax-based JSF implementation: PrimeFaces, ICEFaces (ACE components), RichFaces, etc.
 * Additional points will be given for using JSF technology beyond the "beginner" level (use custom converters, validators, "rich" components, i18n, etc.).
 
-# Java Servlet Technologies Lab5
+# Java Technologies Lab5
 
 ##### Create the pages using [templates](./web/WEB-INF/templates):
 * [page.xhtml](./web/WEB-INF/templates/page.xhtml): describing the general aspect of the application pages: header, content, footer. The header should display the title and might include a menu bar. The footer will display a copyright notice and the current version of the aplication. The header, footer and the menu bar should all be in separate .xhtml files.
@@ -28,3 +28,11 @@
 ###### Notes
 * Use Facelets and not JSP for creating the pages.
 * Additional points will be given for using [JSF technology beyond the "beginner" level](./web/pages/opt-packages-view.xhtml).
+
+# Java Technologies Lab6
+
+## JNDI, Resources, Listeners
+##### Continue the application created for the previous lab, implementing an efficient way for obtaining connections to the database:
+* Configure a connection pool and a JDBC resource using an administrative tool (such as GlassFish Console).
+* Create DataSource objects using either JNDI directly or resource injection.
+* Consider the situation when the application should be implemented using a multi tenant architecture: a single application instance accessing multiple, isolated databases, having the same structure.
