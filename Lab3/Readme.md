@@ -63,3 +63,21 @@
 * Each filter will have a checkox - if it is checked then the filter will be taken into consideration.
 * The query must be implemented using JPA Criteria API.
 
+# Java Technologies Lab9
+
+## Enterprise Java Beans (EJB)
+
+##### Rewrite the data access layer of the application created in the previous laboratories, implementing the [repository classes](./src/ro/uaic/info/javatechnologies/optcourses/repository) as Enterprise Java Beans:
+* Use the support offered by the EJB technology for implementing transactions.
+* Use an EJB interceptor in order to monitor the running time of a specific group of methods.
+* Create at least one timer that will perform some operations (generate an HTML page, for example) using a specified schedule.
+
+##### Add a "manual assignment" page, allowing a group of students to apply together for a specific course. The following enterprise beans must be implemented:
+* [CourseCheckingBean](./src/ro/uaic/info/javatechnologies/optcourses/ejb/CourseCheckingBean.java) - Stateless session bean that offers methods for checking the availability of a course (its capacity is not exceeded).
+* [AssignmentBean](./src/ro/uaic/info/javatechnologies/optcourses/ejb/AssignementBean.java) - Stateful session bean responsible with the assignment of one or more students to a specific course. The assignment should be atomic, either all students are successfully assigned, or the transaction will be rolled back. Create a trigger in the database that will verify if the number of students assigned to an optional course does not exceed the capacity of the course.
+* [CourseStatusBean](./src/ro/uaic/info/javatechnologies/optcourses/ejb/CourseStatusBean.java) - Singleton session bean that keeps an in-memory map of the current assignments. The map will be instantiated at application startup and updated whenever the assignments change.
+###### Notes 
+* Create test units or update the Web interface of your project in order to test your EJBs.
+* It is necessary to implement a model in which collisions do not occur and all the constraints of the problem are met.
+* Use in an non-trivial manner the services provided by the EJB container (for a bouns, maybe...).
+
