@@ -13,4 +13,11 @@
 * decoupling orthogonal concerns, such as logging;
 * decoupling bussines concerns, such as verifying the date for operations like registration and submission;
 * data validation, using Bean Validation annotations;
-* implementing at least one [event-based comunication](./src/ro/uaic/info/technologies/documentmanager/services/TxtLoggingService.java) (for instance, whenever a new document is uploaded a message is produced and all observers of this type of event will be notified). 
+* implementing at least one [event-based comunication](./src/ro/uaic/info/technologies/documentmanager/services/TxtLoggingService.java) (for instance, whenever a new document is uploaded a message is produced and all observers of this type of event will be notified).
+
+# Java Technologies Lab11
+
+## Web Services 
+##### Create RESTful Web services using JAX-RS that allow the interaction with at least one JPA entity, implementing CRUD operations. For example, the application may offer the following:
+* adding a new document and deleting an existing document from the database ([RestService](./src/ro/uaic/info/technologies/documentmanager/webservices/RestService.java));
+* Use XML or JSON for representing consumed or produced data. 
