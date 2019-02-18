@@ -6,7 +6,11 @@
 * Register new users and assign them a specific role, for example admin, guest, etc.
 * [Specify a time frame](./src/ro/uaic/info/technologies/documentmanager/interceptors/ValidPeriod.java), in which registration is open for users and submissions.
 * The possibility to upload a document (for guests) and to view all uploaded documents (for admin). Each uploaded document will have a uniquely generated registration number. All submissions will be logged in a text file. 
-* Use at least one non trivial JSF component, for example a data table, a tree, a dialog, etc.
-* Use a relational database and JDBC in order to store and retrieve data. (PostgreSQL is recommended).
-* It is recommended to use an Ajax-based JSF implementation: PrimeFaces, ICEFaces (ACE components), RichFaces, etc.
-* Additional points will be given for using JSF technology beyond the "beginner" level (use custom converters, validators, "rich" components, i18n, etc.).
+
+##### Use Contexts and Dependency Injection (CDI) for:
+* the management of application's beans;
+* decoupling the components using dependency injection (for example, [producer methods](./src/ro/uaic/info/technologies/documentmanager/producers));
+* decoupling orthogonal concerns, such as logging;
+* decoupling bussines concerns, such as verifying the date for operations like registration and submission;
+* data validation, using Bean Validation annotations;
+* implementing at least one [event-based comunication](./src/ro/uaic/info/technologies/documentmanager/services/TxtLoggingService.java) (for instance, whenever a new document is uploaded a message is produced and all observers of this type of event will be notified). 
