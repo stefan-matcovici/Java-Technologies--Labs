@@ -21,3 +21,11 @@
 ##### Create RESTful Web services using JAX-RS that allow the interaction with at least one JPA entity, implementing CRUD operations. For example, the application may offer the following:
 * adding a new document and deleting an existing document from the database ([RestService](./src/ro/uaic/info/technologies/documentmanager/webservices/RestService.java));
 * Use XML or JSON for representing consumed or produced data. 
+
+# Java Technologies Lab12
+
+## Java EE Security
+##### Add security features to the application created in the previous lab, using standard mechanisms offered by Java EE for:
+* Authentication
+* Controlling the access to Web resources
+* Securing EJB components
